@@ -11,17 +11,15 @@
   "type": "footer",
   "name": "Footer Group",
   "sections": {
-    "sub-footer":{
+    "sub-footer": {
       "type": "sub-footer",
-      "settings": {
-
-      }
+      "disabled": true,
+      "settings": {}
     },
     "footer": {
       "type": "footer",
-      "settings": {
-        
-      }
+      "disabled": true,
+      "settings": {}
     }
   },
   "order": [

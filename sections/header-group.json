@@ -11,17 +11,24 @@
   "type": "header",
   "name": "Header Group",
   "sections": {
-    "announcement-bar":{
+    "announcement-bar": {
       "type": "announcement-bar",
-      "settings": {}
+      "settings": {
+        "announcement_text": "Enjoy Your Free Shipping On All Orders",
+        "announcement_link": "#",
+        "bg_color": "#eb6312",
+        "text_color": "#333333",
+        "font_size": 16
+      }
     },
     "header": {
       "type": "header",
+      "disabled": true,
       "settings": {}
     }
   },
   "order": [
     "announcement-bar",
     "header"
-  ],
+  ]
 }
