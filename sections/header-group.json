@@ -21,7 +21,7 @@
       "name": "Announcement Bar",
       "settings": {
         "announcement_text": "Enjoy Your Free Shipping On All Orders",
-        "announcement_link": "",
+        "announcement_link": "#",
         "bg_color": "#5A6D57",
         "text_color": "#FFFFFF",
         "font_size": 12
