@@ -1,23 +1,53 @@
-<section class="w-full h-[30px]" style="background-color: {{ section.settings.bg_color }};">
-    <div class="flex items-center justify-center h-full px-4">
-        {% if section.settings.announcement_link != blank %}
-            <a href="{{ section.settings.announcement_link }}" 
-               class="font-semibold leading-none tracking-[0.8px] text-center text-[10px] md:text-[12px] lg:text-[{{ section.settings.font_size }}px]" 
-               style="color: {{ section.settings.text_color }};">
-                {{ section.settings.announcement_text }}
-            </a>
-        {% else %}
-            <span class="font-semibold leading-none tracking-[0.8px] text-[10px] md:text-[12px] lg:text-[{{ section.settings.font_size }}px]" 
-                  style="color: {{ section.settings.text_color }};">
-                {{ section.settings.announcement_text }}
-            </span>
-        {% endif %}
-    </div>
+{% style %}
+  .announcement-bar-{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    width: 100%;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+  }
+
+  .announcement-bar__content-{{ section.id }} {
+    color: {{ section.settings.text_color }};
+    font-size: 10px; /* Mobile first */
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.8px;
+    text-align: center;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  @media screen and (min-width: 768px) {
+    .announcement-bar__content-{{ section.id }} {
+      font-size: 12px;
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    .announcement-bar__content-{{ section.id }} {
+      font-size: {{ section.settings.font_size }}px;
+    }
+  }
+{% endstyle %}
+
+<section class="announcement-bar-{{ section.id }}">
+    {% if section.settings.announcement_link != blank %}
+        <a href="{{ section.settings.announcement_link }}" class="announcement-bar__content-{{ section.id }}">
+            {{ section.settings.announcement_text }}
+        </a>
+    {% else %}
+        <span class="announcement-bar__content-{{ section.id }}">
+            {{ section.settings.announcement_text }}
+        </span>
+    {% endif %}
 </section>
 
 {% schema %}
 {
-  "name": "Announcement_Bar",
+  "name": "Announcement Bar",
   "settings": [
     {
       "type": "text",
@@ -31,26 +61,26 @@
       "label": "Announcement Link"
     },
     {
-        "type": "color",
-        "id": "bg_color",
-        "label": "Background Color",
-        "default": "#5A6D57"
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#5A6D57"
     },
     {
-        "type": "color",
-        "id": "text_color",
-        "label": "Text Color",
-        "default": "#FFFFFF"
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#FFFFFF"
     },
     {
-        "type": "range",
-        "id": "font_size",
-        "label": "Font Size",
-        "min": 10,
-        "max": 16,
-        "step": 1,
-        "unit": "px",
-        "default": 12
+      "type": "range",
+      "id": "font_size",
+      "label": "Font Size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
     }
   ],
   "presets": [
