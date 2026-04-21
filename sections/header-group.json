@@ -16,9 +16,9 @@
       "settings": {
         "announcement_text": "Enjoy Your Free Shipping On All Orders",
         "announcement_link": "#",
-        "bg_color": "#eb6312",
-        "text_color": "#333333",
-        "font_size": 16
+        "bg_color": "#5a6d57",
+        "text_color": "#FFFFFF",
+        "font_size": 12
       }
     },
     "header": {
