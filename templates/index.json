@@ -13,18 +13,9 @@
       "type": "hello-world",
       "disabled": true,
       "settings": {}
-    },
-    "collections_BRfhjC": {
-      "type": "collections",
-      "name": "t:general.collections_grid",
-      "settings": {
-        "grid_item_width": "collections--full",
-        "grid_gap": 10
-      }
     }
   },
   "order": [
-    "main",
-    "collections_BRfhjC"
+    "main"
   ]
 }
