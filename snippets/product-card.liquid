@@ -1,9 +1,9 @@
-<div class="product-card group w-[152px] h-[333px] md:w-[392px] md:h-[540px]">
+<div class="product-card group w-[152px] h-[333px] md:w-[392px] md:h-[540px] flex flex-col">
 
   {% comment %} Product Image + Wishlist {% endcomment %}
-  <div class="relative h-[220px] md:h-[420px] overflow-hidden rounded-lg">
-    
-    <a href="{{ product.url }}">
+  <div class="relative w-full h-[220px] md:h-[420px] overflow-hidden rounded-lg flex-shrink-0">
+
+    <a href="{{ product.url }}" class="block w-full h-full">
       <img
         src="{{ product.featured_image | image_url: width: 800 }}"
         alt="{{ product.title | escape }}"
@@ -14,13 +14,13 @@
 
     {% comment %} Wishlist Button {% endcomment %}
     <button
-      class="wishlist-btn absolute top-3 right-3 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm hover:scale-110 transition-transform"
+      class="wishlist-btn absolute top-3 right-3 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm hover:scale-110 transition-transform z-10"
       aria-label="Add to Wishlist"
       data-product-id="{{ product.id }}"
       data-product-handle="{{ product.handle }}"
     >
       <svg
-        class="w-5 h-5 text-gray-800"
+        class="w-4 h-4 md:w-5 md:h-5 text-gray-800"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -36,38 +36,38 @@
 
   </div>
 
-  {% comment %} Product Details {% endcomment %}
-  <div class="mt-4">
+  {% comment %} Product Details Section {% endcomment %}
+  <div class="flex flex-col justify-between flex-1 mt-3 md:mt-4">
 
-    <div class="flex justify-between items-start gap-3">
+    <div class="flex justify-between items-start gap-3 md:gap-4">
 
-      <div class="flex flex-col min-w-0">
-        
+      {% comment %} Left Content {% endcomment %}
+      <div class="min-w-0 flex-1">
+
         {% comment %} Product Type {% endcomment %}
-        <p class="text-sm font-semibold text-gray-900">
+        <p class="text-xs md:text-sm font-semibold text-gray-900">
           {{ product.type }}
         </p>
 
         {% comment %} Product Title (First 3 words only) {% endcomment %}
-        <h3 class="text-gray-500 mt-1 text-sm md:text-base leading-snug">
+        <h3 class="text-gray-500 mt-1 text-xs md:text-base leading-snug min-h-[34px] md:min-h-[48px]">
           {{ product.title | split: ' ' | slice: 0, 3 | join: ' ' }}
         </h3>
 
       </div>
 
-      {% comment %} Product Price {% endcomment %}
-      <span class="font-bold text-base md:text-lg text-gray-900 shrink-0">
+      {% comment %} Price {% endcomment %}
+      <span class="font-bold text-sm md:text-lg text-gray-900 shrink-0">
         {{ product.price | money }}
       </span>
 
     </div>
 
     {% comment %} Color Swatches {% endcomment %}
-    <div class="flex gap-2 mt-3">
+    <div class="flex gap-2 mt-3 md:mt-4 min-h-[20px] md:min-h-[24px]">
 
       {% for option in product.options_with_values %}
         {% if option.name == 'Color' %}
-          
           {% for value in option.values %}
             <button
               class="w-4 h-4 md:w-5 md:h-5 rounded-full border border-gray-300 hover:scale-110 transition-transform"
@@ -75,7 +75,6 @@
               aria-label="Select {{ value }}"
             ></button>
           {% endfor %}
-
         {% endif %}
       {% endfor %}
 
