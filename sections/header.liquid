@@ -1,12 +1,133 @@
-<div class="header-section">
-  <p>This is Header</p>
-</div>
+<header class="site-header bg-gray-100 full-width h-auto lg:min-h-[80px]">
+  <div class="header-container flex items-center justify-between md:justify-evenly px-2 lg:px-4 py-2 md:py-3 lg:py-5">
+    <div class="">
+      <a href="{{ routes.root_url }}" class="block">
+        {% if section.settings.logo != blank %}
+          {{
+            section.settings.logo
+            | image_url: width: 184
+            | image_tag: class: 'h-auto max-w-[120px] md:max-w-[184px] object-contain', alt: shop.name
+          }}
+        {% else %}
+          <span class="font-[family-name:var(--font-montserrat)] h2 font-semibold uppercase tracking-wider">{{ shop.name }}</span>
+        {% endif %}
+      </a>
+    </div>
 
-{% schema  %} 
+    <nav role="navigation">
+      <ul class="hidden md:flex gap-8 list-none">
+        {% for link in section.settings.menu.links %}
+          <li>
+            <a
+              href="{{ link.url }}"
+              class="font-[family-name:var(--font-montserrat)] md:text-sm lg:text-lg font-medium text-[#404040] hover:text-[#5A6D57] transition-colors {% if link.active %}text-[#5A6D57] font-bold{% endif %}"
+              {% if link.current %}
+                aria-current="page"
+              {% endif %}
+            >
+              {{ link.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+
+    <div class="header__icons flex gap-4 items-center">
+      <!-- Mobile Menu Icon -->
+      <button class="menu-toggle block md:hidden" aria-label="Open Menu">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <path d="M4 6H20"></path>
+          <path d="M4 12H20"></path>
+          <path d="M4 18H20"></path>
+        </svg>
+      </button>
+      <!-- Search -->
+      <a href="{{ routes.search_url }}" class="icon-search hidden md:block" aria-label="Search">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="M20 20L16.65 16.65"></path>
+        </svg>
+      </a>
+
+      <!-- Profile -->
+      <a href="{{ routes.account_url }}" class="icon-account hidden md:block" aria-label="Account">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M4 20C4 16.7 7.1 14 12 14C16.9 14 20 16.7 20 20"></path>
+        </svg>
+      </a>
+
+      <!-- Wishlist -->
+      <a href="/pages/wishlist" class="icon-wishlist hidden md:block" aria-label="Wishlist">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <path d="M12 21s-7-4.35-9.5-8.28C.5 9.5 2.42 5.5 6.5 5.5c2.28 0 4.1 1.32 5.5 3.09C13.4 6.82 15.22 5.5 17.5 5.5c4.08 0 6 4 4 7.22C19 16.65 12 21 12 21z"></path>
+        </svg>
+      </a>
+
+      <!-- Cart -->
+      <a href="{{ routes.cart_url }}" class="icon-cart hidden md:block" aria-label="Cart">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <path d="M3 4H5L7 14H18L20 7H6"></path>
+          <circle cx="9" cy="19" r="1.5"></circle>
+          <circle cx="17" cy="19" r="1.5"></circle>
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
     {
-        "name": "Header",
-        "settings": [
-
-        ]
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo Image"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Select Menu"
     }
+  ]
+}
 {% endschema %}
+
+{% comment %} px-2 sm:px-4 md:px-8 lg:px-16 xl:px-24 instead of justify-evenly {% endcomment %}
