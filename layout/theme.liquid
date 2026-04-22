@@ -27,36 +27,7 @@
     {{ content_for_header }}
   </head>
 
-  <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const wishlistButtons = document.querySelectorAll(".wishlist-btn");
-
-  let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-
-  wishlistButtons.forEach((button) => {
-    const productId = button.dataset.productId;
-
-    if (wishlist.includes(productId)) {
-      button.classList.add("active");
-    }
-
-    button.addEventListener("click", function () {
-      if (wishlist.includes(productId)) {
-        wishlist = wishlist.filter(id => id !== productId);
-        button.classList.remove("active");
-      } else {
-        wishlist.push(productId);
-        button.classList.add("active");
-      }
-
-      localStorage.setItem("wishlist", JSON.stringify(wishlist));
-
-      // Optional: update header wishlist count here
-      console.log("Wishlist:", wishlist);
-    });
-  });
-});
-</script>
+  
 
   <body>
     {% sections 'header-group' %}
