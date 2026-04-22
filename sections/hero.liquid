@@ -1,25 +1,49 @@
-<section class="hero-section full-width relative flex items-center overflow-hidden min-h-[390px] lg:min-h-[500px]">
+<section class="hero-section full-width relative flex items-center overflow-hidden min-h-[348px] lg:min-h-[460px] xl:min-h-[500px]">
   {%- comment -%} Background Image with Overlay {%- endcomment -%}
-  
-  <div class="absolute inset-0 z-0">
-    {% if section.settings.image != blank %}
-      {{
-        section.settings.image
-        | image_url: width: 2000
-        | image_tag:
-          class: 'w-full h-full object-cover',
-          widths: '375, 550, 750, 1100, 1500, 1780, 2000',
-          loading: 'eager',
-          alt: section.settings.image.alt
-        | default: shop.name
-      }}
-    {% else %}
-      {%- comment -%} Placeholder if no image is uploaded {%- endcomment -%}
-      {{ 'lifestyle-1' | placeholder_svg_tag: 'w-full h-full object-cover bg-gray-200' }}
-    {% endif %}
 
-    {%- comment -%} Overlay to make text readable {%- endcomment -%}
-    <div class="absolute inset-0 bg-black/30"></div>
+  <div class="absolute inset-0 z-0">
+    {%- if section.settings.image != blank -%}
+      {%- liquid
+        assign mobile_image = section.settings.image
+        if section.settings.image_mobile != blank
+          assign mobile_image = section.settings.image_mobile
+        endif
+      -%}
+
+      {%- comment -%} Mobile Image (Shown only on small screens) {%- endcomment -%}
+      <div class="h-full w-full {% if section.settings.image_mobile != blank %}md:hidden{% else %}hidden{% endif %} block-important-mobile">
+       
+        {{
+          mobile_image
+          | image_url: width: 800
+          | image_tag:
+            class: 'w-full h-full object-cover object-center',
+            widths: '375, 550, 750',
+            loading: 'eager',
+            alt: mobile_image.alt
+          | default: shop.name
+        }}
+      </div>
+
+      {%- comment -%} Desktop Image (Shown only on md and up) {%- endcomment -%}
+      <div class="hidden md:block h-full w-full">
+        {{
+          section.settings.image
+          | image_url: width: 2000
+          | image_tag:
+            class: 'w-full h-full object-cover object-center',
+            widths: '1100, 1500, 1780, 2000',
+            loading: 'eager',
+            alt: section.settings.image.alt
+          | default: shop.name
+        }}
+      </div>
+
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'w-full h-full object-cover bg-gray-200' }}
+    {%- endif -%}
+
+    <div class="absolute inset-0 bg-black/20"></div>
   </div>
 
   {%- comment -%} Content Area {%- endcomment -%}
@@ -54,7 +78,13 @@
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Hero Image"
+      "label": "Desktop Hero Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile Hero Image (Optional)",
+      "info": "If empty, the desktop image will be used."
     },
     {
       "type": "inline_richtext",
