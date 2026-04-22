@@ -11,25 +11,27 @@
   "type": "header",
   "name": "Header Group",
   "sections": {
-    "header": {
-      "type": "header",
-      "disabled": true,
-      "settings": {}
-    },
     "announcement_bar_DcGwxb": {
       "type": "announcement-bar",
       "name": "Announcement Bar",
       "settings": {
         "announcement_text": "Enjoy Your Free Shipping On All Orders",
         "announcement_link": "#",
-        "bg_color": "#5A6D57",
-        "text_color": "#FFFFFF",
+        "bg_color": "#5a6d57",
+        "text_color": "#ffffff",
         "font_size": 12
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo": "shopify://shop_images/Logo.png",
+        "menu": "main-menu"
       }
     }
   },
   "order": [
-    "header",
-    "announcement_bar_DcGwxb"
+    "announcement_bar_DcGwxb",
+    "header"
   ]
 }
