@@ -8,6 +8,6 @@
   },
   "scripts": {
     "dev": "concurrently \"shopify theme dev\" \"npx @tailwindcss/cli -i ./assets/tailwind.input.css -o ./assets/tailwind.output.css --watch\"",
-    "build": "tailwindcss -i ./assets/tailwind.input.css -o ./assets/tailwind.output.css --minify"
+    "build": "npx @tailwindcss/cli -i ./assets/tailwind.input.css -o ./assets/tailwind.output.css --minify"
   }
 }
