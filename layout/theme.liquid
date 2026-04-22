@@ -17,7 +17,7 @@
       {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
     {% endunless %}
 
-   {% # Load and preload the critical CSS %}
+    {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
     {{ 'tailwind.output.css' | asset_url | stylesheet_tag }}
 
@@ -28,15 +28,15 @@
   </head>
 
   <body>
-    
     {% sections 'header-group' %}
 
     {{ content_for_layout }}
 
     <div class="text-center py-10">
-  <h1 class="text-4xl font-bold">Welcome</h1>
-</div>
+      <h1 class="text-4xl font-bold">Welcome</h1>
+    </div>
 
     {% sections 'footer-group' %}
+    {{ 'theme.js' | asset_url | script_tag }}
   </body>
 </html>
