@@ -1,47 +1,25 @@
-{% comment %}
-  This section is used in the collection template to render collection page
-  listing all products within a collection.
+<main class="max-w-7xl mx-auto px-4 py-10">
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
-{% endcomment %}
+  <div class="grid grid-cols-[260px_1fr] gap-10">
 
-<h1>{{ collection.title }}</h1>
+    <!-- Sidebar (Filters) -->
+    <aside aria-label="Product filters">
+      {% render 'filter-sidebar' %}
+    </aside>
 
-<div class="collection-products">
-  {% paginate collection.products by 20 %}
-    {% for product in collection.products %}
-      <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
-            image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
-          %}
-        {% endif %}
-        <div class="collection-product__content">
-          <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
-        </div>
+    <!-- Product Listing -->
+    <section aria-label="Product list">
+
+      <div class="grid grid-cols-2 gap-6">
+        {% for product in collection.products %}
+          <article>
+            {% render 'product-card', product: product %}
+          </article>
+        {% endfor %}
       </div>
-    {% endfor %}
 
-    {{ paginate | default_pagination }}
-  {% endpaginate %}
-</div>
+    </section>
 
-{% stylesheet %}
-  .collection-products {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
-  }
-{% endstylesheet %}
+  </div>
 
-{% schema %}
-{
-  "name": "t:general.collection",
-  "settings": []
-}
-{% endschema %}
+</main>

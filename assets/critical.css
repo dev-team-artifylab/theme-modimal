@@ -115,3 +115,8 @@ body {
 .shopify-section > .full-width {
   grid-column: 1 / -1;
 }
+
+.rotate-45 {
+  transform: rotate(45deg);
+  transition: transform 0.3s ease;
+}
