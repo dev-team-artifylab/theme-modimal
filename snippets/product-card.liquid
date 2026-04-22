@@ -39,27 +39,27 @@
   {% comment %} Product Details Section {% endcomment %}
   <div class="flex flex-col justify-between flex-1 pt-4 md:pt-5">
 
-    {% comment %} Top Row: Product Info + Price {% endcomment %}
-    <div class="flex items-start justify-between gap-4">
+    {% comment %} Product Type + Title + Price Row {% endcomment %}
+    <div class="flex items-center justify-between gap-4">
 
       {% comment %} Left Content {% endcomment %}
       <div class="flex-1 min-w-0">
 
-        {% comment %} Product Type (Bold + Dark) {% endcomment %}
+        {% comment %} Product Type {% endcomment %}
         <p class="text-sm md:text-[15px] font-bold text-[#111111] leading-tight">
           {{ product.type }}
         </p>
 
-        {% comment %} Product Title (Regular + Muted Gray) {% endcomment %}
+        {% comment %} Product Title (fixed height for same card alignment) {% endcomment %}
         <h3 class="mt-2 text-sm md:text-[15px] font-normal text-[#666666] leading-relaxed min-h-[42px] md:min-h-[52px]">
           {{ product.title | split: ' ' | slice: 0, 3 | join: ' ' }}
         </h3>
 
       </div>
 
-      {% comment %} Price (Always Right-Aligned) {% endcomment %}
-      <div class="shrink-0 text-right">
-        <span class="text-lg md:text-[20px] font-bold text-[#111111] leading-none whitespace-nowrap">
+      {% comment %} Price vertically centered {% endcomment %}
+      <div class="shrink-0 flex items-center h-full">
+        <span class="text-lg md:text-[20px] font-bold text-[#111111] whitespace-nowrap">
           {{ product.price | money }}
         </span>
       </div>
@@ -67,19 +67,17 @@
     </div>
 
     {% comment %} Color Swatches {% endcomment %}
-    <div class="flex items-center gap-3 mt-5">
+    <div class="flex items-center gap-3 mt-5 min-h-[28px]">
 
       {% for option in product.options_with_values %}
         {% if option.name == 'Color' %}
-
           {% for value in option.values %}
             <button
-              class="w-6 h-6 md:w-7 md:h-7 rounded-full border border-[#D1D5DB] hover:scale-110 transition-transform shadow-sm"
+              class="w-6 h-6 md:w-7 md:h-7 rounded-full border border-[#D1D5DB] shadow-sm hover:scale-110 transition-transform"
               style="background-color: {{ value | handle }};"
               aria-label="Select {{ value }}"
             ></button>
           {% endfor %}
-
         {% endif %}
       {% endfor %}
 
