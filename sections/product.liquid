@@ -1,50 +1,296 @@
-{% comment %}
-  This section is used in the product template to render product page with
-  media, content, and add-to-cart form.
+<section class="grid grid-cols-1 gap-4">
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/product
-{% endcomment %}
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
 
-<div class="product-images">
-  {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
-  {% endfor %}
-</div>
+  <!-- ===== Images Column ===== -->
+  <div class="images h-[512px] w-full flex gap-6 p-2">
 
-<div class="max-w-md mx-auto">
-  {% render 'product-card', product: product %}
-</div>
-
-<div class="product-form">
-  {% form 'product', product %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
-
-    <select name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
-          {% endif %}
+    <!-- Thumbnails -->
+    <div class="img_box h-full max-h-[500px] overflow-y-auto flex flex-col gap-4 hidden md:flex">
+      {% for image in product.images %}
+        <img 
+          src="{{ image | image_url: width: 125 }}" 
+          data-full="{{ image | image_url: width: 800 }}"
+          alt="{{ image.alt | escape }}" 
+          class="thumbnail w-[125px] h-[160px] object-cover cursor-pointer border-2 border-transparent hover:border-black"
         >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
       {% endfor %}
-    </select>
+    </div>
 
-    <input type="text" name="quantity" min="1" value="1">
+    <!-- Main Image -->
+    {% if product.featured_image %}
+      <img 
+        id="mainImage"
+        class="w-full h-full object-cover"
+        src="{{ product.featured_image | image_url: width: 800 }}" 
+        alt="{{ product.featured_image.alt | escape }}"
+      >
+    {% else %}
+      {{ 'product-1' | placeholder_svg_tag: 'w-full h-[512px] object-cover' }}
+    {% endif %}
 
-    <input type="submit" value="Add to cart">
-    {{ form | payment_button }}
-  {% endform %}
+  </div>
+
+  <!-- ===== Description Column ===== -->
+  <div class="description flex flex-col gap-[24px] p-6">
+      <h3 class="text-[32px] font-bold">{{ product.title }}</h3>
+
+      <p id="product-desc" class="text-gray-600">
+          {% if product.description.size > 200 %}
+            <span id="desc-short">{{ product.description | truncate: 200 }}</span>
+            <button class="text-primary text-[18px] ml-1">Read More</button>
+          {% else %}
+            {{ product.description }}
+          {% endif %}
+      </p>
+
+      <div class="colors flex flex-col gap-2">
+          {% for option in product.options_with_values %}
+            {% if option.name == 'Color' %}
+              <p>Colors</p>
+              <div class="flex gap-4">
+                  {% for value in option.values %}
+                      <div 
+                          class="color-swatch w-6 h-6 rounded-full border-2 border-gray-300 cursor-pointer transition-all"
+                          style="background-color: {{ value | downcase }};"
+                          data-color="{{ value }}"
+                          title="{{ value }}"
+                      ></div>
+                  {% endfor %}
+              </div>
+            {% endif %}
+          {% endfor %}
+      </div>
+
+      <!-- Size -->
+      <div class="w-full flex flex-col items-end gap-2">
+          <label class="block mb-2 text-sm font-medium text-gray-300 p-2">
+            size guide
+          </label>
+          <select class="w-full p-2 border border-gray-300 text-[22px]">
+            <option class="text-black font-bold" value="">size</option>
+            <option class="text-black font-bold" value="S">Small (S)</option>
+            <option class="text-black font-bold" value="M">Medium (M)</option>
+            <option class="text-black font-bold" value="L">Large (L)</option>
+            <option class="text-black font-bold" value="XL">Extra Large (XL)</option>
+          </select>
+      </div>
+
+      <!-- Add to Cart -->
+      <button class="w-full h-[40px] bg-primary p-2 text-white">
+          Add to Cart
+      </button>
+
+      <!-- Delivery Info -->
+      <div class="delivery-info flex justify-between p-1">
+           <div class="flex gap-4">
+              <img src="{{ 'truck.png' | asset_url }}" alt="Free delivery" width="20" height="20" class="w-[20px] h-[20px]">
+              <p class="text-[14px]">Free delivery</p>
+           </div>
+           <div class="flex gap-2">
+              <img src="{{ 'heart.png' | asset_url }}" alt="Add to wishlist" width="20" height="20" class="w-[20px] h-[20px]">
+              <p class="text-[14px]">Add to wishlist</p>
+           </div>
+      </div>
+  </div>
+
 </div>
+
+<div class="faq w-full flex flex-col md:flex-row gap-2">
+
+  <!-- LEFT PART -->
+  <div class="left-part w-1/2 bg-[#F0F2EF] flex flex-col">
+
+    <!-- FAQ ITEM 1 -->
+    <div class="faq-item border-gray-300 border-b-0">
+      <div class="faq-header flex justify-between items-center p-4 cursor-pointer hover:bg-gray-100 transition">
+        <p class="font-medium">Fitting</p>
+        <img src="{{ 'add.png' | asset_url }}" alt="" class=" w-[18px] h-[18px]">
+      </div>
+      <div class="faq-content hidden p-4 pt-0 text-sm text-gray-700">
+        
+        This is fitting related information. You can put any data here.
+      </div>
+    </div>
+
+    <!-- FAQ ITEM 2 -->
+    <div class="faq-item border-1 border-gray-300 border-b-0">
+      <div class="faq-header flex justify-between items-center p-4 cursor-pointer hover:bg-gray-100 transition">
+        <p class="font-medium">Fabric & care</p>
+        <img src="{{ 'add.png' | asset_url }}" alt="" class=" w-[18px] h-[18px]">
+      </div>
+      <div class="faq-content hidden p-4 pt-0 text-sm text-gray-700">
+        
+        Fabric & care details go here.
+      </div>
+    </div>
+
+    <!-- FAQ ITEM 3 -->
+    <div class="faq-item border-1 border-gray-300 border-b-0">
+      <div class="faq-header flex justify-between items-center p-4 cursor-pointer hover:bg-gray-100 transition">
+        <p class="font-medium">Product Detail</p>
+        <img src="{{ 'add.png' | asset_url }}" alt="" class=" w-[18px] h-[18px]">
+      </div>
+      <div class="faq-content hidden p-4 pt-0 text-sm text-gray-700">
+        
+        Product Detail information. Sourced and crafted with the highest standards.
+      </div>
+    </div>
+
+    <!-- FAQ ITEM 4 -->
+    <div class="faq-item border-1 border-gray-300">
+      <div class="faq-header flex justify-between items-center p-4 cursor-pointer hover:bg-gray-100 transition">
+        <p class="font-medium">Shipping And Return</p>
+        <img src="{{ 'add.png' | asset_url }}" alt="" class="w-[18px] h-[18px]">
+      </div>
+      <div class="faq-content hidden p-4 pt-0 text-sm text-gray-700">
+        
+        Complimentary shipping and returns on all domestic orders within 30 days.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT PART -->
+  <div class="right-part w-1/2 h-auto md:w-1/2 bg-[#F0F2EF] p-2 border border-gray-300  flex">
+    <div class="w-full">
+      <div class="border-b-2 p-2 border-gray-300 w-full text-h5">
+        FAQ Answer
+      </div>
+      <p class="text-body-lg p-2 text-gray-700">
+        This material is our signature high-stretch fabric that drapes like silk and is soft to the touch. Silk is OEKO-TEX® certified and made in Italy in a mill 100% powered by renewable energy (solar and biomass)
+      </p>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- Related Products -->
+
+    <h1 class="text-2xl font-bold mb-6">You may also like</h1>
+    <div class="flex flex-wrap gap-6">
+      {% for related_product in product.collections.first.products limit: 4 %}
+        {% if related_product.handle != product.handle %}
+        <div class="w-[320px] bg-white rounded-lg overflow-hidden shadow-md group">
+
+          <!-- Image Section -->
+          <div class="relative">
+            <a href="{{ related_product.url }}">
+              <img 
+                src="{{ related_product.featured_image | img_url: 'master' }}" 
+                alt="{{ related_product.title | escape }}"
+                class="w-full h-[400px] object-cover"
+              />
+            </a>
+
+            <!-- Wishlist Icon -->
+            <button class="absolute top-3 right-3">
+              <img src="{{ 'heart.png' | asset_url }}" alt="" class="w-[18px] h-[18px]">
+            </button>
+          </div>
+
+          <!-- Content -->
+          <div class="p-4 pt-3">
+            <!-- Title -->
+            <h2 class="text-[17px] font-bold text-gray-900 leading-tight">
+              <a href="{{ related_product.url }}">{{ related_product.title }}</a>
+            </h2>
+            
+            <!-- Subtitle & Price -->
+            <div class="flex justify-between items-center mt-1">
+              <span class="text-[15px] text-gray-600">
+                {% if related_product.type != blank %}{{ related_product.type }}{% else %}{{ related_product.vendor | default: "Turn It Up Dress" }}{% endif %}
+              </span>
+              <span class="text-[15px] font-bold text-gray-900">
+                {{ related_product.price | money }}
+              </span>
+            </div>
+
+            <!-- Color Options -->
+            <div class="flex gap-2 mt-3">
+              {% assign has_color = false %}
+              {% for option in related_product.options_with_values %}
+                {% if option.name == 'Color' or option.name == 'Colour' %}
+                  {% assign has_color = true %}
+                  {% for value in option.values limit: 4 %}
+                    <div class="w-5 h-5 rounded-full border border-gray-200" style="background-color: {{ value | downcase | remove: ' ' }};" title="{{ value }}"></div>
+                  {% endfor %}
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      {% endfor %}
+    </div>  
+
+</section>
+
+
+
+{% comment %}   Schema {% endcomment %}
 
 {% schema %}
 {
-  "name": "t:general.product",
-  "settings": [],
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  }
+  "name": "Product",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    }
+  ]
 }
 {% endschema %}
+
+
+
+
+
+<script>
+  // --- Thumbnail switcher ---
+  const thumbnails = document.querySelectorAll('.thumbnail');
+  const mainImage = document.getElementById('mainImage');
+
+  thumbnails.forEach(img => {
+    img.addEventListener('click', () => {
+      mainImage.src = img.getAttribute('data-full');
+      thumbnails.forEach(i => i.classList.remove('border-black'));
+      img.classList.add('border-black');
+    });
+  });
+
+  // --- Read More / Read Less toggle ---
+  const showAllBtn = document.getElementById('show-all');
+  const descShort  = document.getElementById('desc-short');
+  const descFull   = document.getElementById('desc-full');
+
+  if (showAllBtn) {
+    showAllBtn.addEventListener('click', () => {
+      const isCollapsed = descFull.classList.contains('hidden');
+      descShort.classList.toggle('hidden', isCollapsed);
+      descFull.classList.toggle('hidden', !isCollapsed);
+      showAllBtn.textContent = isCollapsed ? 'Read Less' : 'Read More';
+    });
+  }
+
+  // --- Color swatch selection ---
+  const swatches = document.querySelectorAll('.color-swatch');
+
+  swatches.forEach(swatch => {
+    swatch.addEventListener('click', () => {
+      // Remove active ring from all
+      swatches.forEach(s => {
+        s.classList.remove('ring-2', 'ring-offset-2', 'ring-black', 'border-black');
+        s.classList.add('border-gray-300');
+      });
+      // Add active ring to clicked
+      swatch.classList.remove('border-gray-300');
+      swatch.classList.add('ring-2', 'ring-offset-2', 'ring-black', 'border-black');
+    });
+  });
+
+
+    
+</script>
