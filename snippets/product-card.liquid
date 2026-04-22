@@ -1,44 +1,86 @@
-<div class="product-card group">
-  {% comment %} Product Image with Wishlist Icon {% endcomment %}
-  <div class="relative aspect-[4/5] overflow-hidden rounded-lg">
+<div class="product-card group w-[152px] h-[333px] md:w-[392px] md:h-[540px]">
+
+  {% comment %} Product Image + Wishlist {% endcomment %}
+  <div class="relative h-[220px] md:h-[420px] overflow-hidden rounded-lg">
+    
     <a href="{{ product.url }}">
-      <img 
-        src="{{ product.featured_image | image_url: width: 600 }}" 
+      <img
+        src="{{ product.featured_image | image_url: width: 800 }}"
         alt="{{ product.title | escape }}"
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         loading="lazy"
       >
     </a>
-    <button class="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm hover:scale-110 transition-transform" aria-label="Add to Wishlist">
-      <svg class="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+
+    {% comment %} Wishlist Button {% endcomment %}
+    <button
+      class="wishlist-btn absolute top-3 right-3 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm hover:scale-110 transition-transform"
+      aria-label="Add to Wishlist"
+      data-product-id="{{ product.id }}"
+      data-product-handle="{{ product.handle }}"
+    >
+      <svg
+        class="w-5 h-5 text-gray-800"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+        ></path>
       </svg>
     </button>
+
   </div>
 
-  {% comment %} Product Details Section {% endcomment %}
+  {% comment %} Product Details {% endcomment %}
   <div class="mt-4">
-    <div class="flex justify-between items-start gap-4">
-      <div class="flex flex-col">
-        <p class="text-sm font-semibold text-gray-900">{{ product.type }}</p>
-        <h3 class="text-gray-500 mt-0.5">{{ product.title }}</h3>
+
+    <div class="flex justify-between items-start gap-3">
+
+      <div class="flex flex-col min-w-0">
+        
+        {% comment %} Product Type {% endcomment %}
+        <p class="text-sm font-semibold text-gray-900">
+          {{ product.type }}
+        </p>
+
+        {% comment %} Product Title (First 3 words only) {% endcomment %}
+        <h3 class="text-gray-500 mt-1 text-sm md:text-base leading-snug">
+          {{ product.title | split: ' ' | slice: 0, 3 | join: ' ' }}
+        </h3>
+
       </div>
-      <span class="font-bold text-lg text-gray-900 shrink-0">{{ product.price | money }}</span>
+
+      {% comment %} Product Price {% endcomment %}
+      <span class="font-bold text-base md:text-lg text-gray-900 shrink-0">
+        {{ product.price | money }}
+      </span>
+
     </div>
 
-    {% comment %} Color Swatches (Located below the text) {% endcomment %}
+    {% comment %} Color Swatches {% endcomment %}
     <div class="flex gap-2 mt-3">
+
       {% for option in product.options_with_values %}
         {% if option.name == 'Color' %}
+          
           {% for value in option.values %}
-            <button 
-              class="w-5 h-5 rounded-full border border-gray-300 hover:scale-110 transition-transform" 
+            <button
+              class="w-4 h-4 md:w-5 md:h-5 rounded-full border border-gray-300 hover:scale-110 transition-transform"
               style="background-color: {{ value | handle }};"
               aria-label="Select {{ value }}"
             ></button>
           {% endfor %}
+
         {% endif %}
       {% endfor %}
+
     </div>
+
   </div>
+
 </div>
