@@ -1,0 +1,113 @@
+<section class="hero-section full-width relative flex items-center overflow-hidden min-h-[348px] lg:min-h-[460px] xl:min-h-[500px]">
+  {%- comment -%} Background Image with Overlay {%- endcomment -%}
+
+  <div class="absolute inset-0 z-0">
+    {%- if section.settings.image != blank -%}
+      {%- liquid
+        assign mobile_image = section.settings.image
+        if section.settings.image_mobile != blank
+          assign mobile_image = section.settings.image_mobile
+        endif
+      -%}
+
+      {%- comment -%} Mobile Image (Shown only on small screens) {%- endcomment -%}
+      <div class="h-full w-full {% if section.settings.image_mobile != blank %}md:hidden{% else %}hidden{% endif %} block-important-mobile">
+       
+        {{
+          mobile_image
+          | image_url: width: 800
+          | image_tag:
+            class: 'w-full h-full object-cover object-center',
+            widths: '375, 550, 750',
+            loading: 'eager',
+            alt: mobile_image.alt
+          | default: shop.name
+        }}
+      </div>
+
+      {%- comment -%} Desktop Image (Shown only on md and up) {%- endcomment -%}
+      <div class="hidden md:block h-full w-full">
+        {{
+          section.settings.image
+          | image_url: width: 2000
+          | image_tag:
+            class: 'w-full h-full object-cover object-center',
+            widths: '1100, 1500, 1780, 2000',
+            loading: 'eager',
+            alt: section.settings.image.alt
+          | default: shop.name
+        }}
+      </div>
+
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'w-full h-full object-cover bg-gray-200' }}
+    {%- endif -%}
+
+    <div class="absolute inset-0 bg-black/20"></div>
+  </div>
+
+  {%- comment -%} Content Area {%- endcomment -%}
+  <div class="absolute inset-0 z-10 container mx-auto px-6 md:px-18 lg:px-26">
+    <div class="flex flex-col justify-end h-full pb-10 md:pb-16 lg:pb-20">
+      <div class="max-w-md text-white flex flex-col gap-4">
+        {% if section.settings.heading != blank %}
+          <h1 class="text-xl md:text-2xl lg:text-[34px] font-normal italic leading-[1.4]">
+            {{ section.settings.heading }}
+          </h1>
+        {% endif %}
+
+        {% if section.settings.button_label != blank %}
+          <div>
+            <a
+              href="{{ section.settings.button_link }}"
+              class="inline-block bg-white text-black px-8 py-2 text-sm font-medium uppercase tracking-widest hover:bg-[#5A6D57] hover:text-white transition-all"
+            >
+              {{ section.settings.button_label }}
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Desktop Hero Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile Hero Image (Optional)",
+      "info": "If empty, the desktop image will be used."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Elegance In Simplicity, Earth's Harmony"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "New In"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Section"
+    }
+  ]
+}
+{% endschema %}
