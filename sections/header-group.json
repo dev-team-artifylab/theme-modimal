@@ -28,10 +28,22 @@
         "logo": "shopify://shop_images/Logo.png",
         "menu": "main-menu"
       }
+    },
+    "hero_pjEyCH": {
+      "type": "hero",
+      "name": "Hero Section",
+      "settings": {
+        "image": "shopify://shop_images/5acf40a14ec616f602d9f91b003061a5deef40d0_80c18639-251b-4e09-80d5-97d4463f6daa.png",
+        "image_mobile": "shopify://shop_images/5acf40a14ec616f602d9f91b003061a5deef40d0_1.png",
+        "heading": "Elegance In Simplicity, Earth's Harmony",
+        "button_label": "New In",
+        "button_link": ""
+      }
     }
   },
   "order": [
     "announcement_bar_DcGwxb",
-    "header"
+    "header",
+    "hero_pjEyCH"
   ]
 }
