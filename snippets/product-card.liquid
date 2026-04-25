@@ -1,0 +1,88 @@
+<div class="product-card group w-[152px] h-[333px] md:w-[392px] md:h-[540px] flex flex-col">
+
+  {% comment %} Product Image + Wishlist {% endcomment %}
+  <div class="relative w-full h-[220px] md:h-[420px] overflow-hidden rounded-lg flex-shrink-0">
+
+    <a href="{{ product.url }}" class="block w-full h-full">
+      <img
+        src="{{ product.featured_image | image_url: width: 900 }}"
+        alt="{{ product.title | escape }}"
+        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        loading="lazy"
+      >
+    </a>
+
+    {% comment %} Wishlist Button {% endcomment %}
+    <button
+      class="wishlist-btn absolute top-4 right-4 z-10 flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:scale-110 transition-transform"
+      aria-label="Add to Wishlist"
+      data-product-id="{{ product.id }}"
+      data-product-handle="{{ product.handle }}"
+    >
+      <svg
+        class="w-5 h-5 md:w-6 md:h-6 text-black"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+        ></path>
+      </svg>
+    </button>
+
+  </div>
+
+  {% comment %} Product Details Section {% endcomment %}
+  <div class="flex flex-col justify-between flex-1 pt-4 md:pt-5">
+
+    {% comment %} Product Type + Title + Price Row {% endcomment %}
+    <div class="flex items-center justify-between gap-4">
+
+      {% comment %} Left Content {% endcomment %}
+      <div class="flex-1 min-w-0">
+
+        {% comment %} Product Type {% endcomment %}
+        <p class="text-sm md:text-[15px] font-bold text-[#111111] leading-tight">
+          {{ product.type }}
+        </p>
+
+        {% comment %} Product Title (fixed height for same card alignment) {% endcomment %}
+        <h3 class="mt-2 text-sm md:text-[15px] font-normal text-[#666666] leading-relaxed min-h-[42px] md:min-h-[52px]">
+          {{ product.title | split: ' ' | slice: 0, 3 | join: ' ' }}
+        </h3>
+
+      </div>
+
+      {% comment %} Price vertically centered {% endcomment %}
+      <div class="shrink-0 flex items-center h-full">
+        <span class="text-lg md:text-[20px] font-bold text-[#111111] whitespace-nowrap">
+          {{ product.price | money }}
+        </span>
+      </div>
+
+    </div>
+
+    {% comment %} Color Swatches {% endcomment %}
+    <div class="flex items-center gap-3 mt-5 min-h-[28px]">
+
+      {% for option in product.options_with_values %}
+        {% if option.name == 'Color' %}
+          {% for value in option.values %}
+            <button
+              class="w-6 h-6 md:w-7 md:h-7 rounded-full border border-[#D1D5DB] shadow-sm hover:scale-110 transition-transform"
+              style="background-color: {{ value | handle }};"
+              aria-label="Select {{ value }}"
+            ></button>
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+
+    </div>
+
+  </div>
+
+</div>

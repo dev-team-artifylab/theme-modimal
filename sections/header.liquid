@@ -1,77 +1,247 @@
-<header>
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
+<header class="site-header bg-gray-100 full-width h-auto lg:min-h-[80px]">
+  <div class="header-container flex items-center justify-between md:justify-evenly px-2 lg:px-4 py-2 md:py-3 lg:py-5">
+    <div class="">
+      <a href="{{ routes.root_url }}" class="block">
+        {% if section.settings.logo != blank %}
+          {{
+            section.settings.logo
+            | image_url: width: 184
+            | image_tag: class: 'h-auto max-w-[120px] md:max-w-[184px] object-contain', alt: shop.name
+          }}
+        {% else %}
+          <span class="font-[family-name:var(--font-montserrat)] h2 font-semibold uppercase tracking-wider">
+            {{- shop.name -}}
+          </span>
+        {% endif %}
+      </a>
+    </div>
 
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
+    <nav role="navigation">
+      <ul class="hidden md:flex gap-8 list-none">
+        {% for link in section.settings.menu.links %}
+          <li>
+            <a
+              href="{{ link.url }}"
+              class="font-[family-name:var(--font-montserrat)] md:text-sm lg:text-lg font-medium text-[#404040] hover:text-[#5A6D57] transition-colors {% if link.active %}text-[#5A6D57] font-bold{% endif %}"
+              {% if link.current %}
+                aria-current="page"
+              {% endif %}
+            >
+              {{ link.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
 
-  <div class="header__icons">
-    {% if shop.customer_accounts_enabled %}
-      <shopify-account menu="{{ section.settings.customer_account_menu }}">
-        {{ 'icon-account.svg' | inline_asset_content }}
-      </shopify-account>
-    {% endif %}
+    <div class="header__icons flex gap-4 items-center">
+      <!-- Mobile Menu Icon -->
+      <button id="menu-open" class="menu-toggle block md:hidden" aria-label="Open Menu">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <path d="M4 6H20"></path>
+          <path d="M4 12H20"></path>
+          <path d="M4 18H20"></path>
+        </svg>
+      </button>
+      <!-- Search -->
+      <a href="{{ routes.search_url }}" class="icon-search hidden md:block" aria-label="Search">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="M20 20L16.65 16.65"></path>
+        </svg>
+      </a>
 
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
-      {% endif %}
+      <!-- Profile -->
+      <a href="{{ routes.account_url }}" class="icon-account hidden md:block" aria-label="Account">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M4 20C4 16.7 7.1 14 12 14C16.9 14 20 16.7 20 20"></path>
+        </svg>
+      </a>
 
-      {{ 'icon-cart.svg' | inline_asset_content }}
-    </a>
+      <!-- Wishlist -->
+      <a href="/pages/wishlist" class="icon-wishlist hidden md:block" aria-label="Wishlist">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <path d="M12 21s-7-4.35-9.5-8.28C.5 9.5 2.42 5.5 6.5 5.5c2.28 0 4.1 1.32 5.5 3.09C13.4 6.82 15.22 5.5 17.5 5.5c4.08 0 6 4 4 7.22C19 16.65 12 21 12 21z"></path>
+        </svg>
+      </a>
+
+      <!-- Cart -->
+      <a href="{{ routes.cart_url }}" class="icon-cart hidden md:block" aria-label="Cart">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <path d="M3 4H5L7 14H18L20 7H6"></path>
+          <circle cx="9" cy="19" r="1.5"></circle>
+          <circle cx="17" cy="19" r="1.5"></circle>
+        </svg>
+      </a>
+    </div>
   </div>
 </header>
 
-{% stylesheet %}
-  header {
-    height: 5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  header a {
-    position: relative;
-    text-decoration: none;
-    color: var(--color-foreground);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  header a sup {
-    position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
-  }
-  header svg {
-    width: 2rem;
-  }
-  header .header__menu,
-  header .header__icons {
-    display: flex;
-    gap: 1rem;
-  }
-{% endstylesheet %}
+<!-- Drawer Content -->
+<div id="drawer-overlay" class="fixed inset-0 bg-black/50 z-30 hidden transition-opacity opacity-0"></div>
 
+<div
+  id="drawer-navigation"
+  class="fixed top-0 left-0 z-40 h-screen w-80 bg-white border-r border-gray-200 transition-transform -translate-x-full overflow-y-auto"
+  tabindex="-1"
+>
+  <div class="flex items-center justify-between p-4 border-b">
+    <div class="drawer__logo max-w-[120px]">
+      <a href="{{ routes.root_url }}" class="block">
+        {% if section.settings.logo != blank %}
+          {{
+            section.settings.logo
+            | image_url: width: 300
+            | image_tag: class: 'h-auto w-full object-contain', alt: shop.name
+          }}
+        {% else %}
+          <span class="font-bold uppercase tracking-widest text-sm">{{ shop.name }}</span>
+        {% endif %}
+      </a>
+    </div>
+
+    <button id="menu-close" type="button" class="p-2 text-gray-500 hover:text-black">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <nav class="p-4">
+    <ul class="flex flex-col gap-2 font-medium text-base">
+      {% for link in section.settings.menu.links %}
+        <li>
+          <a href="{{ link.url }}" class="hover:text-[#5A6D57] transition-colors hover:font-semibold">
+            {{ link.title }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+
+  <div class="mt-8 p-4 border-t border-gray-100 grid grid-cols-2 gap-4">
+    <a href="{{ routes.search_url }}" class="flex items-center gap-2 text-sm text-gray-600">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+      Search
+    </a>
+    <a href="{{ routes.account_url }}" class="flex items-center gap-2 text-sm text-gray-600">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+      </svg>
+      Account
+    </a>
+    <a href="/pages/wishlist" class="flex items-center gap-2 text-sm text-gray-600">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+      </svg>
+      Wishlist
+    </a>
+    <a href="{{ routes.cart_url }}" class="flex items-center gap-2 text-sm text-gray-600">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+      </svg>
+      Cart ({{ cart.item_count }})
+    </a>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const drawer = document.getElementById('drawer-navigation');
+    const overlay = document.getElementById('drawer-overlay');
+    const openBtn = document.getElementById('menu-open');
+    const closeBtn = document.getElementById('menu-close');
+
+    // Helper function to handle the drawer state
+    function toggleDrawer(isOpen) {
+      if (isOpen) {
+        // Show Drawer
+        drawer.classList.remove('-translate-x-full');
+        drawer.classList.add('translate-x-0');
+        // Show Overlay
+        overlay.classList.remove('hidden');
+        setTimeout(() => overlay.classList.add('opacity-100'), 10);
+        // Prevent Background Scroll
+        document.body.classList.add('overflow-hidden');
+      } else {
+        // Hide Drawer
+        drawer.classList.remove('translate-x-0');
+        drawer.classList.add('-translate-x-full');
+        // Hide Overlay
+        overlay.classList.remove('opacity-100');
+        setTimeout(() => overlay.classList.add('hidden'), 300);
+        // Allow Background Scroll
+        document.body.classList.remove('overflow-hidden');
+      }
+    }
+
+    // Event Listeners
+    if (openBtn) openBtn.addEventListener('click', () => toggleDrawer(true));
+    if (closeBtn) closeBtn.addEventListener('click', () => toggleDrawer(false));
+    if (overlay) overlay.addEventListener('click', () => toggleDrawer(false));
+
+    // Optional: Close on ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !drawer.classList.contains('-translate-x-full')) {
+        toggleDrawer(false);
+      }
+    });
+  });
+</script>
 {% schema %}
 {
-  "name": "t:general.header",
+  "name": "Header",
   "settings": [
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo Image"
     },
     {
       "type": "link_list",
-      "id": "customer_account_menu",
-      "label": "t:labels.customer_account_menu",
-      "default": "customer-account-main-menu"
+      "id": "menu",
+      "label": "Select Menu"
     }
   ]
 }
 {% endschema %}
+
+{% comment %} px-2 sm:px-4 md:px-8 lg:px-16 xl:px-24 instead of justify-evenly {% endcomment %}

@@ -1,1 +1,82 @@
 @import "tailwindcss";
+
+@theme {
+  /* Fonts */
+  --font-montserrat: "Montserrat", sans-serif;
+
+  /* Base Colors */
+  --color-primary: #748C70;
+  --color-black: #0C0C0C;
+  --color-white: #FFFFFF;
+  --color-background: #FFFFFF;
+
+  /* Display */
+  --text-display-1: 64px;
+  --text-display-2: 56px;
+
+  /* Headings */
+  --text-h1: 44px;
+  --text-h2: 40px;
+  --text-h3: 32px;
+  --text-h4: 24px;
+  --text-h5: 20px;
+  --text-h6: 16px;
+
+  /* Body */
+  --text-body-xl: 20px;
+  --text-body-lg: 18px;
+  --text-body-md: 16px;
+  --text-body-sm: 14px;
+  --text-body-xs: 12px;
+
+  /* Caption */
+  --text-caption-lg: 14px;
+  --text-caption-md: 12px;
+  --text-caption-sm: 10px;
+
+  /* Button */
+  --text-button-lg: 16px;
+  --text-button-sm: 14px;
+
+  /* Overline */
+  --text-overline-lg: 16px;
+  --text-overline-sm: 12px;
+}
+
+/* --- Utilities --- */
+
+@utility font-montserrat {
+  font-family: var(--font-montserrat);
+}
+
+/* Display */
+@utility text-display-1 { @apply font-montserrat font-bold text-[var(--text-display-1)]; }
+@utility text-display-2 { @apply font-montserrat font-bold text-[var(--text-display-2)]; }
+
+/* Headings */
+@utility text-h1 { @apply font-montserrat font-bold text-[var(--text-h1)]; }
+@utility text-h2 { @apply font-montserrat font-bold text-[var(--text-h2)]; }
+@utility text-h3 { @apply font-montserrat font-semibold text-[var(--text-h3)]; }
+@utility text-h4 { @apply font-montserrat font-bold text-[var(--text-h4)]; }
+@utility text-h5 { @apply font-montserrat font-bold text-[var(--text-h5)]; }
+@utility text-h6 { @apply font-montserrat font-bold text-[var(--text-h6)]; }
+
+/* Body */
+@utility text-body-xl { @apply font-montserrat font-normal text-[var(--text-body-xl)]; }
+@utility text-body-lg { @apply font-montserrat font-normal text-[var(--text-body-lg)]; }
+@utility text-body-md { @apply font-montserrat font-normal text-[var(--text-body-md)]; }
+@utility text-body-sm { @apply font-montserrat font-normal text-[var(--text-body-sm)]; }
+@utility text-body-xs { @apply font-montserrat font-normal text-[var(--text-body-xs)]; }
+
+/* Caption */
+@utility text-caption-lg { @apply font-montserrat font-semibold text-[var(--text-caption-lg)]; }
+@utility text-caption-md { @apply font-montserrat font-normal text-[var(--text-caption-md)]; }
+@utility text-caption-sm { @apply font-montserrat font-semibold text-[var(--text-caption-sm)]; }
+
+/* Button */
+@utility text-button-lg { @apply font-montserrat font-normal text-[var(--text-button-lg)]; }
+@utility text-button-sm { @apply font-montserrat font-normal text-[var(--text-button-sm)]; }
+
+/* Overline */
+@utility text-overline-lg { @apply font-montserrat font-normal text-[var(--text-overline-lg)]; }
+@utility text-overline-sm { @apply font-montserrat font-semibold text-[var(--text-overline-sm)]; }

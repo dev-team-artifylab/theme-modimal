@@ -9,17 +9,21 @@
  */
 {
   "type": "footer",
-  "name": "t:general.footer",
+  "name": "Footer Group",
   "sections": {
+    "sub-footer": {
+      "type": "sub-footer",
+      "disabled": true,
+      "settings": {}
+    },
     "footer": {
       "type": "footer",
-      "settings": {
-        "menu": "",
-        "show_payment_icons": true
-      }
+      "disabled": true,
+      "settings": {}
     }
   },
   "order": [
+    "sub-footer",
     "footer"
   ]
 }
