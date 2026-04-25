@@ -12,7 +12,7 @@
           src="{{ image | image_url: width: 125 }}" 
           data-full="{{ image | image_url: width: 800 }}"
           alt="{{ image.alt | escape }}" 
-          class="thumbnail w-[125px] h-[160px] object-cover cursor-pointer border-2 border-transparent hover:border-black"
+          class="thumbnail w-[125px] h-[160px] object-cover cursor-pointer"
         >
       {% endfor %}
     </div>
@@ -32,7 +32,7 @@
   </div>
 
   <!-- ===== Description Column ===== -->
-  <div class="description flex flex-col gap-[24px] p-6">
+  <div class="description flex flex-col gap-[24px] p-2">
       <h3 class="text-[32px] font-bold">{{ product.title }}</h3>
 
       <p id="product-desc" class="text-gray-600">
@@ -44,42 +44,102 @@
           {% endif %}
       </p>
 
-      <div class="colors flex flex-col gap-2">
-          {% for option in product.options_with_values %}
-            {% if option.name == 'Color' %}
-              <p>Colors</p>
-              <div class="flex gap-4">
-                  {% for value in option.values %}
-                      <div 
-                          class="color-swatch w-6 h-6 rounded-full border-2 border-gray-300 cursor-pointer transition-all"
-                          style="background-color: {{ value | downcase }};"
-                          data-color="{{ value }}"
-                          title="{{ value }}"
-                      ></div>
-                  {% endfor %}
-              </div>
-            {% endif %}
-          {% endfor %}
-      </div>
+      <!-- Option Section -->
+          {% form 'product', product, class: 'product-form flex flex-col gap-6' %}
+            <input type="hidden" name="id" id="variant-id" value="{{ product.selected_or_first_available_variant.id }}">
+            <script id="product-data" type="application/json">
+              {{ product | json }}
+            </script>
 
-      <!-- Size -->
-      <div class="w-full flex flex-col items-end gap-2">
-          <label class="block mb-2 text-sm font-medium text-gray-300 p-2">
-            size guide
-          </label>
-          <select class="w-full p-2 border border-gray-300 text-[22px]">
-            <option class="text-black font-bold" value="">size</option>
-            <option class="text-black font-bold" value="S">Small (S)</option>
-            <option class="text-black font-bold" value="M">Medium (M)</option>
-            <option class="text-black font-bold" value="L">Large (L)</option>
-            <option class="text-black font-bold" value="XL">Extra Large (XL)</option>
-          </select>
-      </div>
+        {% for option in product.options_with_values %}
+          <div class="flex flex-col justify-start gap-4 w-full">
+            <div class="flex justify-between items-center w-full">
+              <h3 class="text-sm sm:text-[16px] text-black font-normal">
+                {% if option.name contains 'Color' or option.name contains 'Colour' -%}
+                  Colors
+                {%- endif %}
+              </h3>
+              {% if option.name contains 'Size' or option.name contains 'size' %}
+                <button type="button" class="text-[14px] text-gray-400 hover:text-black transition-colors">Size Guide</button>
+              {% endif %}
+            </div>
 
-      <!-- Add to Cart -->
-      <button class="w-full h-[40px] bg-primary p-2 text-white">
-          Add to Cart
+        <div class="flex flex-wrap items-center gap-3 sm:gap-4 w-full">
+          {% if option.name contains 'Color' or option.name contains 'Colour' %}
+            {% for value in option.values %}
+              <label class="cursor-pointer">
+                <input
+                  type="radio"
+                  name="{{ option.name }}"
+                  value="{{ value }}"
+                  class="hidden peer"
+                  {% if option.selected_value == value %}
+                    checked
+                  {% endif %}
+                >
+                {% comment %} Dynamic color mapping logic {% endcomment %}
+                {% assign color_val = value | downcase %}
+                <span
+                  class="color-swatch w-[24px] h-[24px] rounded-full border-2 border-black peer-checked:border-gray-300 peer-checked:[&_svg]:opacity-100 flex items-center justify-center relative transition-all"
+                  style="background-color: {{ color_val }};"
+                >
+                  <svg
+                    class="w-5 h-5 text-white opacity-0 transition-opacity pointer-events-none drop-shadow-sm"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M16 5L7 14L4 11"/>
+                  </svg>
+                </span>
+              </label>
+            {% endfor %}
+          {% else %}
+            <div class="relative w-full">
+  <select 
+    name="{{ option.name }}" 
+    class="w-full h-[40px] px-4 bg-white border border-gray-200 text-h6 text-black font-bold focus:outline-none focus:border-black focus:ring-1 focus:ring-black cursor-pointer transition-colors appearance-none pr-10"
+  >
+    <option value="" disabled selected class="text-h6 font-bold"> 
+      {{ option.name }}
+    </option>
+    {% for value in option.values %}
+      <option value="{{ value }}" class="text-body-md font-bold">
+        {{ value }}
+      </option>
+    {% endfor %}
+  </select> 
+
+  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-black">
+    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+      <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"></path>
+    </svg>
+  </div>
+</div>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+
+    
+      <button
+        type="submit"
+        data-add-to-cart-btn
+        {% unless product.available %}
+          disabled
+        {% endunless %}
+        class="bg-[#5A6D57] text-white h-[40px] w-full hover:bg-gray-800 transition disabled:bg-gray-300 cursor-pointer"
+      >
+        <span class="text-body-sm font-normal">
+          {% if product.available %}Add to Cart {{product.price | money}}{% else %}Sold Out{% endif %}
+        </span>
       </button>
+    
+  {% endform %}
+
 
       <!-- Delivery Info -->
       <div class="delivery-info flex justify-between p-1">
@@ -96,140 +156,147 @@
 
 </div>
 
-<div class="faq w-full flex flex-col md:flex-row gap-2">
 
-  <!-- LEFT PART -->
-  <div class="left-part w-1/2 bg-[#F0F2EF] flex flex-col">
 
-    <!-- FAQ ITEM 1 -->
-    <div class="faq-item border-gray-300 border-b-0">
-      <div class="faq-header flex justify-between items-center p-4 cursor-pointer hover:bg-gray-100 transition">
-        <p class="font-medium">Fitting</p>
-        <img src="{{ 'add.png' | asset_url }}" alt="" class=" w-[18px] h-[18px]">
+{% comment %} FAQ SECTION {% endcomment %}
+
+<div class="w-full mx-auto p-6 flex gap-6">
+
+  <!-- LEFT SIDE -->
+  <div class="w-1/2 bg-[#F0F2EF] border border-gray-300">
+
+    <!-- ITEM -->
+    <div class="border-b border-gray-300 accordion-item">
+      <div class="flex justify-between items-center p-4 cursor-pointer header">
+        <p class="font-semibold">Fitting</p>
+        <span class="text-xl icon">+</span>
       </div>
-      <div class="faq-content hidden p-4 pt-0 text-sm text-gray-700">
-        
-        This is fitting related information. You can put any data here.
+      <div class="content hidden px-4 pb-4 text-sm text-gray-600">
+        Fitting content here...
       </div>
     </div>
 
-    <!-- FAQ ITEM 2 -->
-    <div class="faq-item border-1 border-gray-300 border-b-0">
-      <div class="faq-header flex justify-between items-center p-4 cursor-pointer hover:bg-gray-100 transition">
-        <p class="font-medium">Fabric & care</p>
-        <img src="{{ 'add.png' | asset_url }}" alt="" class=" w-[18px] h-[18px]">
+    <!-- ITEM -->
+    <div class="border-b border-gray-300 accordion-item">
+      <div class="flex justify-between items-center p-4 cursor-pointer header">
+        <p class="font-semibold">Fabric & Care</p>
+        <span class="text-xl icon">−</span>
       </div>
-      <div class="faq-content hidden p-4 pt-0 text-sm text-gray-700">
-        
-        Fabric & care details go here.
+      <div class="content px-4 pb-4 text-sm text-gray-600">
+        <p><strong>Fabric:</strong></p>
+        <p>Tailored Stretch, Made in Italy</p>
+
+        <p class="mt-2"><strong>Care:</strong></p>
+        <p>Cold machine wash, line dry</p>
       </div>
     </div>
 
-    <!-- FAQ ITEM 3 -->
-    <div class="faq-item border-1 border-gray-300 border-b-0">
-      <div class="faq-header flex justify-between items-center p-4 cursor-pointer hover:bg-gray-100 transition">
-        <p class="font-medium">Product Detail</p>
-        <img src="{{ 'add.png' | asset_url }}" alt="" class=" w-[18px] h-[18px]">
+    <!-- ITEM -->
+    <div class="border-b border-gray-300 accordion-item">
+      <div class="flex justify-between items-center p-4 cursor-pointer header">
+        <p class="font-semibold">Product Detail</p>
+        <span class="text-xl icon">+</span>
       </div>
-      <div class="faq-content hidden p-4 pt-0 text-sm text-gray-700">
-        
-        Product Detail information. Sourced and crafted with the highest standards.
+      <div class="content hidden px-4 pb-4 text-sm text-gray-600">
+        Product details here...
       </div>
     </div>
 
-    <!-- FAQ ITEM 4 -->
-    <div class="faq-item border-1 border-gray-300">
-      <div class="faq-header flex justify-between items-center p-4 cursor-pointer hover:bg-gray-100 transition">
-        <p class="font-medium">Shipping And Return</p>
-        <img src="{{ 'add.png' | asset_url }}" alt="" class="w-[18px] h-[18px]">
+    <!-- ITEM -->
+    <div class="accordion-item">
+      <div class="flex justify-between items-center p-4 cursor-pointer header">
+        <p class="font-semibold ">Shipping And Return</p>
+        <span class="text-xl icon">−</span>
       </div>
-      <div class="faq-content hidden p-4 pt-0 text-sm text-gray-700">
-        
-        Complimentary shipping and returns on all domestic orders within 30 days.
+      <div class="content px-4 pb-4 text-sm text-gray-600">
+        <p>Shipping:<br>is free on US , Canada orders are $175 <br>
+        Returns: <br> Unwashed, unworn items are eligible for returns or exchanges within 30 days of purchase. Final Sale items are not eligible for returns or exchanges.</p>
+       
       </div>
     </div>
 
   </div>
 
-  <!-- RIGHT PART -->
-  <div class="right-part w-1/2 h-auto md:w-1/2 bg-[#F0F2EF] p-2 border border-gray-300  flex">
-    <div class="w-full">
-      <div class="border-b-2 p-2 border-gray-300 w-full text-h5">
-        FAQ Answer
-      </div>
-      <p class="text-body-lg p-2 text-gray-700">
-        This material is our signature high-stretch fabric that drapes like silk and is soft to the touch. Silk is OEKO-TEX® certified and made in Italy in a mill 100% powered by renewable energy (solar and biomass)
-      </p>
+  <!-- RIGHT SIDE -->
+  <div class="w-1/2 bg-[#F0F2EF] border border-gray-300 p-4 flex flex-col gap-[24px]">
+    <h2 class="font-semibold text-lg mb-2 border-b border-gray-300 p-4">Silk</h2>
+    <p class="text-sm text-gray-700">
+      This material is our signature high-stretch fabric that drapes like silk.
+      Soft to touch and eco-certified.
+    </p>
+
+    <div class="flex gap-2 mt-4">
+      <span class="bg-white px-3 py-1 text-xs">Quick Dry</span>
+      <span class="bg-white px-3 py-1 text-xs">Chemical Free</span>
+      <span class="bg-white px-3 py-1 text-xs">Machine Washable</span>
     </div>
   </div>
 
 </div>
 
 
+
 <!-- Related Products -->
+<h1 class="text-2xl font-bold mb-6">You may also like</h1>
+<div class="flex flex-wrap gap-6">
+  {% assign target_collection = section.settings.collection %}
+  {% if target_collection == blank %}
+    {% assign target_collection = product.collections.first %}
+  {% endif %}
 
-    <h1 class="text-2xl font-bold mb-6">You may also like</h1>
-    <div class="flex flex-wrap gap-6">
-      {% for related_product in product.collections.first.products limit: 4 %}
-        {% if related_product.handle != product.handle %}
-        <div class="w-[320px] bg-white rounded-lg overflow-hidden shadow-md group">
+  {% assign shown_count = 0 %}
+  {% for related_product in target_collection.products %}
+    {% if related_product.handle != product.handle and shown_count < 4 %}
+      {% assign shown_count = shown_count | plus: 1 %}
+      <div class="w-[320px] bg-white rounded-lg overflow-hidden shadow-md group">
 
-          <!-- Image Section -->
-          <div class="relative">
-            <a href="{{ related_product.url }}">
-              <img 
-                src="{{ related_product.featured_image | img_url: 'master' }}" 
-                alt="{{ related_product.title | escape }}"
-                class="w-full h-[400px] object-cover"
-              />
-            </a>
+        <!-- Image Section -->
+        <div class="relative">
+          <a href="{{ related_product.url }}">
+            <img 
+              src="{{ related_product.featured_image | img_url: 'master' }}" 
+              alt="{{ related_product.title | escape }}"
+              class="w-full h-[400px] object-cover"
+            />
+          </a>
+          <!-- Wishlist Icon -->
+          <button class="absolute top-3 right-3">
+            <img src="{{ 'heart.png' | asset_url }}" alt="" class="w-[18px] h-[18px]">
+          </button>
+        </div>
 
-            <!-- Wishlist Icon -->
-            <button class="absolute top-3 right-3">
-              <img src="{{ 'heart.png' | asset_url }}" alt="" class="w-[18px] h-[18px]">
-            </button>
+        <!-- Content -->
+        <div class="p-4 pt-3">
+          <h2 class="text-[17px] font-bold text-gray-900 leading-tight">
+            <a href="{{ related_product.url }}">{{ related_product.title }}</a>
+          </h2>
+          <div class="flex justify-between items-center mt-1">
+            <span class="text-[15px] text-gray-600">
+              {% if related_product.type != blank %}{{ related_product.type }}{% else %}{{ related_product.vendor | default: "Turn It Up Dress" }}{% endif %}
+            </span>
+            <span class="text-[15px] font-bold text-gray-900">
+              {{ related_product.price | money }}
+            </span>
           </div>
-
-          <!-- Content -->
-          <div class="p-4 pt-3">
-            <!-- Title -->
-            <h2 class="text-[17px] font-bold text-gray-900 leading-tight">
-              <a href="{{ related_product.url }}">{{ related_product.title }}</a>
-            </h2>
-            
-            <!-- Subtitle & Price -->
-            <div class="flex justify-between items-center mt-1">
-              <span class="text-[15px] text-gray-600">
-                {% if related_product.type != blank %}{{ related_product.type }}{% else %}{{ related_product.vendor | default: "Turn It Up Dress" }}{% endif %}
-              </span>
-              <span class="text-[15px] font-bold text-gray-900">
-                {{ related_product.price | money }}
-              </span>
-            </div>
-
-            <!-- Color Options -->
-            <div class="flex gap-2 mt-3">
-              {% assign has_color = false %}
-              {% for option in related_product.options_with_values %}
-                {% if option.name == 'Color' or option.name == 'Colour' %}
-                  {% assign has_color = true %}
-                  {% for value in option.values limit: 4 %}
-                    <div class="w-5 h-5 rounded-full border border-gray-200" style="background-color: {{ value | downcase | remove: ' ' }};" title="{{ value }}"></div>
-                  {% endfor %}
-                {% endif %}
-              {% endfor %}
-            </div>
+          <!-- Color Options -->
+          <div class="flex gap-2 mt-3">
+            {% for option in related_product.options_with_values %}
+              {% if option.name == 'Color' or option.name == 'Colour' %}
+                {% for value in option.values limit: 4 %}
+                  <div class="w-5 h-5 rounded-full border border-gray-200" style="background-color: {{ value | downcase | remove: ' ' }};" title="{{ value }}"></div>
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
           </div>
         </div>
-        {% endif %}
-      {% endfor %}
-    </div>  
+
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
 
 </section>
 
-
-
-{% comment %}   Schema {% endcomment %}
 
 {% schema %}
 {
@@ -243,54 +310,178 @@
   ]
 }
 {% endschema %}
-
-
-
-
-
 <script>
-  // --- Thumbnail switcher ---
-  const thumbnails = document.querySelectorAll('.thumbnail');
-  const mainImage = document.getElementById('mainImage');
+  document.addEventListener("DOMContentLoaded", function () {
+    const productForm = document.querySelector('.product-form');
+    if (!productForm) return;
 
-  thumbnails.forEach(img => {
-    img.addEventListener('click', () => {
-      mainImage.src = img.getAttribute('data-full');
-      thumbnails.forEach(i => i.classList.remove('border-black'));
-      img.classList.add('border-black');
-    });
-  });
+    const productDataEl = document.getElementById('product-data');
+    if (!productDataEl) return;
 
-  // --- Read More / Read Less toggle ---
-  const showAllBtn = document.getElementById('show-all');
-  const descShort  = document.getElementById('desc-short');
-  const descFull   = document.getElementById('desc-full');
+    let productData;
+    try {
+      productData = JSON.parse(productDataEl.textContent);
+    } catch (e) {
+      console.warn('Product JSON parse error:', e);
+      return;
+    }
 
-  if (showAllBtn) {
-    showAllBtn.addEventListener('click', () => {
-      const isCollapsed = descFull.classList.contains('hidden');
-      descShort.classList.toggle('hidden', isCollapsed);
-      descFull.classList.toggle('hidden', !isCollapsed);
-      showAllBtn.textContent = isCollapsed ? 'Read Less' : 'Read More';
-    });
-  }
+    const variantIdInput = document.getElementById('variant-id');
+    const addToCartBtn = productForm.querySelector('[data-add-to-cart-btn]');
+    const addToCartText = productForm.querySelector('[data-add-to-cart-text]');
+    const mainImage = document.getElementById('mainImage');
+    const thumbnails = document.querySelectorAll('.thumbnail');
 
-  // --- Color swatch selection ---
-  const swatches = document.querySelectorAll('.color-swatch');
-
-  swatches.forEach(swatch => {
-    swatch.addEventListener('click', () => {
-      // Remove active ring from all
-      swatches.forEach(s => {
-        s.classList.remove('ring-2', 'ring-offset-2', 'ring-black', 'border-black');
-        s.classList.add('border-gray-300');
+    // --- Thumbnail switcher ---
+    thumbnails.forEach(img => {
+      img.addEventListener('click', () => {
+        if (mainImage) mainImage.src = img.getAttribute('data-full');
+        thumbnails.forEach(i => i.classList.remove('border-black', 'border-2'));
+        img.classList.add('border-black', 'border-2');
       });
-      // Add active ring to clicked
-      swatch.classList.remove('border-gray-300');
-      swatch.classList.add('ring-2', 'ring-offset-2', 'ring-black', 'border-black');
     });
+
+    // --- Read More / Read Less toggle ---
+    const showAllBtn = document.getElementById('show-all');
+    const descShort  = document.getElementById('desc-short');
+    const descFull   = document.getElementById('desc-full');
+
+    if (showAllBtn) {
+      showAllBtn.addEventListener('click', () => {
+        const isCollapsed = descFull.classList.contains('hidden');
+        if (descShort) descShort.classList.toggle('hidden', isCollapsed);
+        if (descFull) descFull.classList.toggle('hidden', !isCollapsed);
+        showAllBtn.textContent = isCollapsed ? 'Read Less' : 'Read More';
+      });
+    }
+
+    // --- Quantity buttons ---
+    const qtyInput = productForm.querySelector('input[name="quantity"]');
+    const qtyMinus = productForm.querySelector('[data-qty-btn="minus"]');
+    const qtyPlus = productForm.querySelector('[data-qty-btn="plus"]');
+
+    if (qtyMinus && qtyInput) {
+      qtyMinus.addEventListener('click', () => {
+        let val = parseInt(qtyInput.value) || 1;
+        if (val > 1) qtyInput.value = val - 1;
+      });
+    }
+    if (qtyPlus && qtyInput) {
+      qtyPlus.addEventListener('click', () => {
+        let val = parseInt(qtyInput.value) || 1;
+        qtyInput.value = val + 1;
+      });
+    }
+
+    // --- Variant switching logic ---
+    function updateVariant() {
+      const selectedOptions = [];
+      const optionNames = productData.options.map(opt => typeof opt === 'string' ? opt : opt.name || opt);
+
+      optionNames.forEach(optionName => {
+        const escapedName = optionName.replace(/"/g, '\\"');
+        const checkedRadio = productForm.querySelector(`input[name="${escapedName}"]:checked`);
+        const selectBox = productForm.querySelector(`select[name="${escapedName}"]`);
+        
+        if (checkedRadio) {
+          selectedOptions.push(checkedRadio.value);
+        } else if (selectBox) {
+          selectedOptions.push(selectBox.value);
+        } else {
+          selectedOptions.push(null);
+        }
+      });
+
+      // Find the variant
+      const matchedVariant = productData.variants.find(variant => {
+        return selectedOptions.every((val, index) => {
+          return val === variant.options[index];
+        });
+      });
+
+      if (matchedVariant) {
+        // Update variant ID
+        if (variantIdInput) variantIdInput.value = matchedVariant.id;
+
+        // Update URL
+        if (window.history.replaceState) {
+          const url = new URL(window.location);
+          url.searchParams.set('variant', matchedVariant.id);
+          window.history.replaceState({}, '', url);
+        }
+
+        // Update Button
+        if (addToCartBtn) {
+          addToCartBtn.disabled = !matchedVariant.available;
+          if (addToCartText) {
+            addToCartText.textContent = matchedVariant.available ? 'Add to Cart' : 'Sold Out';
+          }
+        }
+
+        // Update Image
+        if (matchedVariant.featured_image && mainImage) {
+          mainImage.src = matchedVariant.featured_image.src;
+          // Sync thumbnail border
+          thumbnails.forEach(img => {
+            if (img.src.includes(matchedVariant.featured_image.src.split('?')[0])) {
+               thumbnails.forEach(i => i.classList.remove('border-black', 'border-2'));
+               img.classList.add('border-black', 'border-2');
+            }
+          });
+        }
+      }
+    }
+
+    productForm.addEventListener('change', function(e) {
+      if (e.target.type === 'radio' || e.target.tagName === 'SELECT') {
+        updateVariant();
+      }
+    });
+
+    // Handle clicks on spans/labels acting as radio buttons
+    productForm.addEventListener('click', function(e) {
+      const label = e.target.closest('label');
+      if (label) {
+        const input = label.querySelector('input[type="radio"]');
+        if (input && !input.checked) {
+          input.checked = true;
+          // Dispatch change event to trigger updateVariant
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+    });
+
+    // Initialize variant state on load
+    updateVariant();
+
+    // --- FAQ Toggler ---
+    const items = document.querySelectorAll('.accordion-item');
+
+    items.forEach(item => {
+      const header = item.querySelector('.header');
+      const content = item.querySelector('.content');
+      const icon = item.querySelector('.icon');
+
+      if (header && content && icon) {
+        header.addEventListener('click', () => {
+          const isOpen = !content.classList.contains('hidden');
+
+          // CLOSE ALL
+          items.forEach(i => {
+            const c = i.querySelector('.content');
+            const ic = i.querySelector('.icon');
+            if (c) c.classList.add('hidden');
+            if (ic) ic.textContent = '+';
+          });
+
+          // OPEN CURRENT
+          if (!isOpen) {
+            content.classList.remove('hidden');
+            icon.textContent = '−';
+          }
+        });
+      }
+    });
+
   });
-
-
-    
 </script>
