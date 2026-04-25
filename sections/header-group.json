@@ -39,11 +39,24 @@
         "button_label": "New In",
         "button_link": "shopify://collections/women-s-smart-casual-wear"
       }
+    },
+    "featured_collection_Pd49TH": {
+      "type": "featured-collection",
+      "name": "Featured Collections",
+      "settings": {
+        "title": "Collection",
+        "view_all_label": "View All",
+        "collection_1": "party-wear",
+        "collection_2": "surplice-top",
+        "collection_3": "t-shirt",
+        "collection_4": "women-s-elegant-dresses"
+      }
     }
   },
   "order": [
     "announcement_bar_DcGwxb",
     "header",
-    "hero_pjEyCH"
+    "hero_pjEyCH",
+    "featured_collection_Pd49TH"
   ]
 }
