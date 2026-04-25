@@ -51,12 +51,21 @@
         "collection_3": "t-shirt",
         "collection_4": "women-s-elegant-dresses"
       }
+    },
+    "collections_8JcWUf": {
+      "type": "collections",
+      "name": "t:general.collections_grid",
+      "settings": {
+        "grid_item_width": "collections--full",
+        "grid_gap": 10
+      }
     }
   },
   "order": [
     "announcement_bar_DcGwxb",
     "header",
     "hero_pjEyCH",
-    "featured_collection_Pd49TH"
+    "featured_collection_Pd49TH",
+    "collections_8JcWUf"
   ]
 }
