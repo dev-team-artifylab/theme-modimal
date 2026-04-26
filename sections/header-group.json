@@ -51,12 +51,22 @@
         "collection_3": "t-shirt",
         "collection_4": "women-s-elegant-dresses"
       }
+    },
+    "modiweek_top_collection_dw83pY": {
+      "type": "modiweek-top-collection",
+      "name": "Modiweek Slider",
+      "settings": {
+        "heading": "Modiweek",
+        "collection": "professional-women-s-outerwear",
+        "products_to_show": 12
+      }
     }
   },
   "order": [
     "announcement_bar_DcGwxb",
     "header",
     "hero_pjEyCH",
-    "featured_collection_Pd49TH"
+    "featured_collection_Pd49TH",
+    "modiweek_top_collection_dw83pY"
   ]
 }
