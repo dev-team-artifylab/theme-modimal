@@ -44,6 +44,18 @@
     "modiweek_rrTKPt": {
       "type": "modiweek",
       "blocks": {
+        "collection_block_FLtPME": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "sunday"
+          }
+        },
+        "collection_block_qLpbwf": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "sunday"
+          }
+        },
         "collection_block_3MmLt6": {
           "type": "collection_block",
           "settings": {
@@ -70,6 +82,8 @@
         }
       },
       "block_order": [
+        "collection_block_FLtPME",
+        "collection_block_qLpbwf",
         "collection_block_3MmLt6",
         "collection_block_7iLDWC",
         "collection_block_MERFGt",
