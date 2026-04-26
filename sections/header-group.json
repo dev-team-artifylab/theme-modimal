@@ -60,6 +60,14 @@
         "collection": "sunday",
         "products_to_show": 12
       }
+    },
+    "collections_aLLJPC": {
+      "type": "collections",
+      "name": "t:general.collections_grid",
+      "settings": {
+        "grid_item_width": "collections--full",
+        "grid_gap": 10
+      }
     }
   },
   "order": [
@@ -67,6 +75,7 @@
     "header",
     "hero_pjEyCH",
     "featured_collection_Pd49TH",
-    "modiweek_top_collection_dw83pY"
+    "modiweek_top_collection_dw83pY",
+    "collections_aLLJPC"
   ]
 }
