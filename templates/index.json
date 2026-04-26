@@ -9,11 +9,6 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
-      "disabled": true,
-      "settings": {}
-    },
     "collections_BEbV8M": {
       "type": "collections",
       "disabled": true,
@@ -22,10 +17,44 @@
         "grid_item_width": "collections--full",
         "grid_gap": 10
       }
+    },
+    "hero_Mdmn3A": {
+      "type": "hero",
+      "name": "Hero Section",
+      "settings": {
+        "image": "shopify://shop_images/5acf40a14ec616f602d9f91b003061a5deef40d0_80c18639-251b-4e09-80d5-97d4463f6daa.png",
+        "image_mobile": "shopify://shop_images/5acf40a14ec616f602d9f91b003061a5deef40d0_1.png",
+        "heading": "Elegance In Simplicity, Earth's Harmony",
+        "button_label": "New In",
+        "button_link": "shopify://collections/surplice-top"
+      }
+    },
+    "featured_collection_hmYEA3": {
+      "type": "featured-collection",
+      "name": "Featured Collections",
+      "settings": {
+        "title": "Collection",
+        "view_all_label": "View All",
+        "collection_1": "professional-women-s-outerwear",
+        "collection_2": "women-pants",
+        "collection_3": "t-shirt",
+        "collection_4": "women-s-smart-casual-wear"
+      }
+    },
+    "modiweek_top_collection_pGnA3e": {
+      "type": "modiweek-top-collection",
+      "name": "Modiweek Slider",
+      "settings": {
+        "heading": "Modiweek",
+        "collection": "surplice-top",
+        "products_to_show": 12
+      }
     }
   },
   "order": [
-    "main",
-    "collections_BEbV8M"
+    "collections_BEbV8M",
+    "hero_Mdmn3A",
+    "featured_collection_hmYEA3",
+    "modiweek_top_collection_pGnA3e"
   ]
 }

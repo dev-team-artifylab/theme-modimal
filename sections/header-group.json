@@ -28,54 +28,10 @@
         "logo": "shopify://shop_images/Logo.png",
         "menu": "main-menu"
       }
-    },
-    "hero_pjEyCH": {
-      "type": "hero",
-      "name": "Hero Section",
-      "settings": {
-        "image": "shopify://shop_images/5acf40a14ec616f602d9f91b003061a5deef40d0_80c18639-251b-4e09-80d5-97d4463f6daa.png",
-        "image_mobile": "shopify://shop_images/5acf40a14ec616f602d9f91b003061a5deef40d0_1.png",
-        "heading": "Elegance In Simplicity, Earth's Harmony",
-        "button_label": "New In",
-        "button_link": "shopify://collections/women-s-smart-casual-wear"
-      }
-    },
-    "featured_collection_Pd49TH": {
-      "type": "featured-collection",
-      "name": "Featured Collections",
-      "settings": {
-        "title": "Collection",
-        "view_all_label": "View All",
-        "collection_1": "party-wear",
-        "collection_2": "surplice-top",
-        "collection_3": "t-shirt",
-        "collection_4": "women-s-elegant-dresses"
-      }
-    },
-    "modiweek_top_collection_dw83pY": {
-      "type": "modiweek-top-collection",
-      "name": "Modiweek Slider",
-      "settings": {
-        "heading": "Modiweek",
-        "collection": "sunday",
-        "products_to_show": 12
-      }
-    },
-    "collections_aLLJPC": {
-      "type": "collections",
-      "name": "t:general.collections_grid",
-      "settings": {
-        "grid_item_width": "collections--full",
-        "grid_gap": 10
-      }
     }
   },
   "order": [
     "announcement_bar_DcGwxb",
-    "header",
-    "hero_pjEyCH",
-    "featured_collection_Pd49TH",
-    "modiweek_top_collection_dw83pY",
-    "collections_aLLJPC"
+    "header"
   ]
 }
