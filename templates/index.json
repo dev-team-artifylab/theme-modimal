@@ -41,13 +41,43 @@
         "collection_4": "women-s-smart-casual-wear"
       }
     },
-    "modiweek_top_collection_pGnA3e": {
-      "type": "modiweek-top-collection",
-      "name": "Modiweek Slider",
+    "modiweek_rrTKPt": {
+      "type": "modiweek",
+      "blocks": {
+        "collection_block_3MmLt6": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "sunday"
+          }
+        },
+        "collection_block_7iLDWC": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "sunday"
+          }
+        },
+        "collection_block_MERFGt": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "sunday"
+          }
+        },
+        "collection_block_8fpq4a": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "sunday"
+          }
+        }
+      },
+      "block_order": [
+        "collection_block_3MmLt6",
+        "collection_block_7iLDWC",
+        "collection_block_MERFGt",
+        "collection_block_8fpq4a"
+      ],
+      "name": "Modiweek Collections",
       "settings": {
-        "heading": "Modiweek",
-        "collection": "surplice-top",
-        "products_to_show": 12
+        "heading": "Modiweek"
       }
     }
   },
@@ -55,6 +85,6 @@
     "collections_BEbV8M",
     "hero_Mdmn3A",
     "featured_collection_hmYEA3",
-    "modiweek_top_collection_pGnA3e"
+    "modiweek_rrTKPt"
   ]
 }
