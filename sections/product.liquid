@@ -297,6 +297,34 @@
 
 </section>
 
+<!-- Quick Cart Overlay -->
+<div id="quick_cart_overlay" class="fixed inset-0 bg-black/50 backdrop-blur-[2px] z-40 hidden opacity-0 transition-opacity"></div>
+
+<!-- Quick Cart Drawer -->
+<section id="quick_cart" class="fixed top-[120px] right-0 h-[calc(100vh-120px)] w-[600px] bg-background z-50 transform translate-x-full transition-transform flex flex-col">
+  <!-- Header -->
+  <div class="flex justify-center items-center p-6 shrink-0">
+    <h2 class="text-h5 font-bold text-gray-900">Your Cart</h2>
+  </div>
+
+  <!-- Scrollable Content -->
+  <div class="flex-1 overflow-y-auto flex flex-col">
+    <!-- Cart Items -->
+    <div id="quick-cart-items" class="p-6 flex flex-col gap-6">
+      <div class="flex items-center justify-center py-10 text-gray-500">Your cart is empty.</div>
+    </div>
+
+    <!-- Footer -->
+    <div class="p-6 pt-0 flex justify-center items-center">
+      <a href="{{ routes.cart_url }}" 
+        class="w-[392px] h-[40px] bg-[#5A6D57] text-white text-center text-body-sm hover:bg-gray-800 transition cursor-pointer flex items-center justify-center">
+        Go to Cart
+      </a>
+    </div>
+  </div>
+</section>
+
+
 
 {% schema %}
 {
@@ -331,6 +359,166 @@
     const addToCartText = productForm.querySelector('[data-add-to-cart-text]');
     const mainImage = document.getElementById('mainImage');
     const thumbnails = document.querySelectorAll('.thumbnail');
+
+    // Quick Cart Drawer Logic
+    const quickCartOverlay = document.getElementById('quick_cart_overlay');
+    const quickCart = document.getElementById('quick_cart');
+    const closeQuickCart = document.getElementById('close-quick-cart');
+    const quickCartItems = document.getElementById('quick-cart-items');
+    const quickCartTotal = document.getElementById('quick-cart-total');
+
+    function openCartDrawer() {
+      if (!quickCartOverlay || !quickCart) return;
+      quickCartOverlay.classList.remove('hidden');
+      // trigger reflow
+      void quickCartOverlay.offsetWidth;
+      quickCartOverlay.classList.remove('opacity-0');
+      quickCart.classList.remove('translate-x-full');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCartDrawer() {
+      if (!quickCartOverlay || !quickCart) return;
+      quickCartOverlay.classList.add('opacity-0');
+      quickCart.classList.add('translate-x-full');
+      document.body.style.overflow = '';
+      setTimeout(() => {
+        quickCartOverlay.classList.add('hidden');
+      }, 300);
+    }
+
+    if (closeQuickCart) closeQuickCart.addEventListener('click', closeCartDrawer);
+    if (quickCartOverlay) quickCartOverlay.addEventListener('click', closeCartDrawer);
+
+    function formatMoney(cents) {
+      // Basic formatting
+      return '$' + (cents / 100).toFixed(2);
+    }
+
+    function renderCartItems(cart) {
+      if (quickCartTotal) {
+        quickCartTotal.textContent = formatMoney(cart.total_price);
+      }
+      
+      if (!quickCartItems) return;
+      
+      if (cart.item_count === 0) {
+        quickCartItems.innerHTML = '<div class="flex items-center justify-center py-10 text-gray-500">Your cart is empty.</div>';
+        return;
+      }
+
+      let itemsHtml = '';
+      cart.items.forEach(item => {
+        const imageUrl = item.image ? item.image : '';
+        itemsHtml += `
+          <div class="h-[163px] flex gap-4 pb-4">
+            ${imageUrl ? `<img src="${imageUrl}" alt="${item.product_title}" class="w-[117px] h-[163px] object-cover">` : '<div class="w-20 h-24"></div>'}
+            <div class="flex-1 flex flex-col justify-between">
+              <div class="flex flex-col gap-1">
+                <div class="flex justify-between items-start">
+                  <h3 class="font-bold text-h6 text-gray-900 pr-2">${item.product_title}</h3>
+                  <button type="button" class="text-button-sm text-gray-500 hover:text-black transition cursor-pointer" onclick="updateCartItem('${item.key}', 0)" title="Remove item">✕</button>
+                </div>
+                ${item.options_with_values 
+                  ? item.options_with_values.filter(opt => opt.value !== 'Default Title').map(opt => `<h6 class="text-body-sm text-gray-600 mt-1">${opt.name} : ${opt.value}</h6>`).join('') 
+                  : (item.variant_title && item.variant_title !== 'Default Title' ? `<p class="text-xs text-gray-800 mt-1">${item.variant_title}</p>` : '')}
+              </div>
+              <div class="flex justify-between items-center mt-2">
+                <div class="flex bg-[#D1D9CF] items-center">
+                  <button type="button" class="px-2 py-1 text-gray-500 hover:text-black cursor-pointer" onclick="updateCartItem('${item.key}', ${item.quantity - 1})">-</button>
+                  <span class="px-2 text-sm font-medium w-6 text-center">${item.quantity}</span>
+                  <button type="button" class="px-2 py-1 text-gray-500 hover:text-black cursor-pointer" onclick="updateCartItem('${item.key}', ${item.quantity + 1})">+</button>
+                </div>
+                <span class="font-bold text-sm">${formatMoney(item.final_line_price)}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      quickCartItems.innerHTML = itemsHtml;
+
+      // Update header cart counts
+      const desktopCartCount = document.getElementById('desktop-cart-count');
+      if (desktopCartCount) {
+        desktopCartCount.textContent = cart.item_count;
+        if (cart.item_count === 0) {
+          desktopCartCount.classList.add('hidden');
+        } else {
+          desktopCartCount.classList.remove('hidden');
+        }
+      }
+      
+      const mobileCartCount = document.getElementById('mobile-cart-count');
+      if (mobileCartCount) {
+        mobileCartCount.textContent = cart.item_count;
+      }
+    }
+
+    const routesRoot = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) ? window.Shopify.routes.root : '/';
+
+    window.updateCartItem = function(key, quantity) {
+      fetch(routesRoot + 'cart/change.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id: String(key),
+          quantity: quantity
+        })
+      })
+      .then(response => response.json())
+      .then(cart => {
+        renderCartItems(cart);
+      })
+      .catch(error => console.error('Error updating cart:', error));
+    };
+
+    // Initial cart fetch
+    fetch(routesRoot + 'cart.js')
+      .then(response => response.json())
+      .then(cart => {
+        renderCartItems(cart);
+      })
+      .catch(error => console.error('Error fetching cart:', error));
+
+    // AJAX Add to Cart
+    productForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(productForm);
+      const submitBtn = addToCartBtn;
+      const originalHtml = submitBtn ? submitBtn.innerHTML : '';
+      
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="text-body-sm font-normal">Adding...</span>';
+      }
+
+      fetch(routesRoot + 'cart/add.js', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(item => {
+        return fetch(routesRoot + 'cart.js');
+      })
+      .then(response => response.json())
+      .then(cart => {
+        renderCartItems(cart);
+        openCartDrawer();
+      })
+      .catch((error) => {
+        console.error('Error adding to cart:', error);
+      })
+      .finally(() => {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalHtml;
+        }
+      });
+    });
+    
 
     // --- Thumbnail switcher ---
     thumbnails.forEach(img => {
