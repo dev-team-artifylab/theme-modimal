@@ -24,9 +24,24 @@
       "settings": {
         "image": "shopify://shop_images/5acf40a14ec616f602d9f91b003061a5deef40d0_80c18639-251b-4e09-80d5-97d4463f6daa.png",
         "image_mobile": "shopify://shop_images/5acf40a14ec616f602d9f91b003061a5deef40d0_1.png",
+        "section_height": "medium",
+        "content_alignment": "left",
+        "vertical_alignment": "bottom",
+        "text_size": "medium",
+        "text_color": "#ffffff",
+        "overlay_opacity": 20,
         "heading": "Elegance In Simplicity, Earth's Harmony",
         "button_label": "New In",
         "button_link": "shopify://collections/surplice-top"
+      }
+    },
+    "best_sellers_7ieEJm": {
+      "type": "best-sellers",
+      "name": "Best Sellers Collection",
+      "settings": {
+        "title": "Best Sellers",
+        "view_all_label": "View All",
+        "products_to_show": 5
       }
     },
     "featured_collection_hmYEA3": {
@@ -98,6 +113,7 @@
   "order": [
     "collections_BEbV8M",
     "hero_Mdmn3A",
+    "best_sellers_7ieEJm",
     "featured_collection_hmYEA3",
     "modiweek_rrTKPt"
   ]
