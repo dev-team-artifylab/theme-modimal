@@ -1,0 +1,65 @@
+<section class="collection-section py-8 px-4 md:px-6 lg:px-8">
+  <div class="flex justify-between items-center py-4 border-b border-gray-100 mb-6">
+    <h3 class="text-lg md:text-xl lg:text-2xl font-semibold uppercase tracking-tight">
+      {{ section.settings.title | default: 'Best Sellers' }}
+    </h3>
+
+    {% comment %} Desktop View All - মোবাইলে লুকানো থাকবে (hidden) {% endcomment %}
+    <a
+      href="/collections/all?sort_by=best-selling"
+      class="text-xs md:text-sm underline uppercase tracking-widest hover:text-gray-500 transition-colors"
+    >
+      {{ section.settings.view_all_label }}
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+    {% for product in collections.all.products limit: section.settings.products_to_show %}
+      {% render 'product-card', product: product %}
+    {% endfor %}
+  </div>
+
+  {% comment %} Mobile View All - শুধু মোবাইলে দেখাবে (block md:hidden) এবং নিচে সেন্টারে থাকবে
+  <div class="mt-8 flex justify-center md:hidden">
+    <a
+      href="/collections/all?sort_by=best-selling"
+      class="inline-block px-8 py-3 border border-black text-xs uppercase tracking-[0.2em] font-semibold hover:bg-black hover:text-white transition-all w-full text-center"
+    >
+      {{ section.settings.view_all_label }}
+    </a>
+  </div> {% endcomment %}
+</section>
+
+{% schema %}
+{
+  "name": "Best Sellers Collection",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Best Sellers"
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "View All Label",
+      "default": "View All"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 3,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    }
+  ],
+  "presets": [
+    {
+      "name": "Best Sellers Collection"
+    }
+  ]
+}
+{% endschema %}
