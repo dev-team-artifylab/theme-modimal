@@ -1,6 +1,16 @@
-<section class="hero-section full-width relative flex items-center overflow-hidden min-h-[348px] lg:min-h-[460px] xl:min-h-[500px]">
-  {%- comment -%} Background Image with Overlay {%- endcomment -%}
-
+<section
+  class="
+    font-[var(--font-montserrat)] hero-section full-width relative flex overflow-hidden
+    {% if section.settings.section_height == 'small' %}
+      min-h-[338px] lg:min-h-[380px] xl:min-h-[400px]
+    {% elsif section.settings.section_height == 'medium' %}
+      min-h-[348px] lg:min-h-[390px] xl:min-h-[410px]
+    {% else %}
+      min-h-[358px] lg:min-h-[400px] xl:min-h-[420]
+    {% endif %}
+  "
+>
+  {%- comment -%} Background Image Section (আগের মতোই থাকবে) {%- endcomment -%}
   <div class="absolute inset-0 z-0">
     {%- if section.settings.image != blank -%}
       {%- liquid
@@ -9,71 +19,71 @@
           assign mobile_image = section.settings.image_mobile
         endif
       -%}
-
-      {%- comment -%} Mobile Image (Shown only on small screens) {%- endcomment -%}
       <div class="h-full w-full {% if section.settings.image_mobile != blank %}md:hidden{% else %}hidden{% endif %} block-important-mobile">
-       
-        {{
-          mobile_image
-          | image_url: width: 800
-          | image_tag:
-            class: 'w-full h-full object-cover object-center',
-            widths: '375, 550, 750',
-            loading: 'eager',
-            alt: mobile_image.alt
-          | default: shop.name
-        }}
+        {{ mobile_image | image_url: width: 800 | image_tag: class: 'w-full h-full object-cover', loading: 'eager' }}
       </div>
-
-      {%- comment -%} Desktop Image (Shown only on md and up) {%- endcomment -%}
       <div class="hidden md:block h-full w-full">
         {{
           section.settings.image
           | image_url: width: 2000
-          | image_tag:
-            class: 'w-full h-full object-cover object-center',
-            widths: '1100, 1500, 1780, 2000',
-            loading: 'eager',
-            alt: section.settings.image.alt
-          | default: shop.name
+          | image_tag: class: 'w-full h-full object-cover', loading: 'eager'
         }}
       </div>
-
     {%- else -%}
       {{ 'lifestyle-1' | placeholder_svg_tag: 'w-full h-full object-cover bg-gray-200' }}
     {%- endif -%}
-
-    <div class="absolute inset-0 bg-black/20"></div>
+    <div class="absolute inset-0 bg-black/{{ section.settings.overlay_opacity }}"></div>
   </div>
 
-  {%- comment -%} Content Area {%- endcomment -%}
-  <div class="absolute inset-0 z-10 container mx-auto px-6 md:px-18 lg:px-26">
-    <div class="flex flex-col justify-end h-full pb-10 md:pb-16 lg:pb-20">
-      <div class="max-w-md text-white flex flex-col gap-4">
-        {% if section.settings.heading != blank %}
-          <h1 class="text-xl md:text-2xl lg:text-[34px] font-normal italic leading-[1.4]">
-            {{ section.settings.heading }}
-          </h1>
-        {% endif %}
+  {%- comment -%} Content Area - এখানে পজিশন কন্ট্রোল করা হয়েছে {%- endcomment -%}
+  <div
+    class="
+      relative z-10 w-full px-6 md:px-10 lg:px-16 flex
+      {% if section.settings.content_alignment == 'left' %} justify-start text-left
+      {% elsif section.settings.content_alignment == 'center' %} justify-center text-center
+      {% else %} justify-end text-right {% endif %}
+      {% if section.settings.vertical_alignment == 'top' %} items-start pt-10
+      {% elsif section.settings.vertical_alignment == 'center' %} items-center
+      {% else %} items-end pb-6 md:pb-8 {% endif %}
+    "
+  >
+    <div
+      class="
+        max-w-2xl text-white flex flex-col gap-6
+        {% if section.settings.content_alignment == 'center' %} items-center {% elsif section.settings.content_alignment == 'right' %} items-end {% endif %}
+      "
+    >
+      {% if section.settings.heading != blank %}
+        <h1
+          class="
+            font-[var(--font-montserrat)] leading-[1.2] font-normal italic leading-[1.8]
+            {% if section.settings.text_size == 'small' %} text-sm md:text-base
+            {% elsif section.settings.text_size == 'medium' %} text-xl md:text-2xl lg:text-3xl
+            {% else %} text-2xl md:text-3xl lg:text-4xl {% endif %}
+          "
+          style="color: {{ section.settings.text_color }};"
+        >
+          {{ section.settings.heading }}
+        </h1>
+      {% endif %}
 
-        {% if section.settings.button_label != blank %}
-          <div>
-            <a
-              href="{{ section.settings.button_link }}"
-              class="inline-block bg-white text-black px-8 py-2 text-sm font-medium uppercase tracking-widest hover:bg-[#5A6D57] hover:text-white transition-all"
-            >
-              {{ section.settings.button_label }}
-            </a>
-          </div>
-        {% endif %}
-      </div>
+      {% if section.settings.button_label != blank %}
+        <div class="cta-wrapper font-[var(--font-montserrat)]">
+          <a
+            href="{{ section.settings.button_link }}"
+            class="inline-block bg-white text-black px-2 md:px-4 lg:px-6 py-2 text-xs font-medium uppercase tracking-widest hover:bg-black hover:text-white transition-all"
+          >
+            {{ section.settings.button_label }}
+          </a>
+        </div>
+      {% endif %}
     </div>
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Hero",
+  "name": "Hero Section",
   "settings": [
     {
       "type": "image_picker",
@@ -83,20 +93,79 @@
     {
       "type": "image_picker",
       "id": "image_mobile",
-      "label": "Mobile Hero Image (Optional)",
-      "info": "If empty, the desktop image will be used."
+      "label": "Mobile Hero Image"
+    },
+    {
+      "type": "select",
+      "id": "section_height",
+      "label": "Section Height",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large / Full" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Text Horizontal Position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "vertical_alignment",
+      "label": "Text Vertical Position",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "bottom"
+    },
+    {
+      "type": "select",
+      "id": "text_size",
+      "label": "Heading Text Size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Heading Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 10,
+      "unit": "%",
+      "label": "Overlay Opacity",
+      "default": 20
     },
     {
       "type": "inline_richtext",
       "id": "heading",
       "label": "Heading",
-      "default": "Elegance In Simplicity, Earth's Harmony"
+      "default": "Elegance In Simplicity"
     },
     {
       "type": "text",
       "id": "button_label",
       "label": "Button Label",
-      "default": "New In"
+      "default": "Shop Now"
     },
     {
       "type": "url",
