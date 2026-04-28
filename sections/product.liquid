@@ -297,34 +297,6 @@
 
 </section>
 
-<!-- Quick Cart Overlay -->
-<div id="quick_cart_overlay" class="fixed inset-0 bg-black/50 backdrop-blur-[2px] z-40 hidden opacity-0 transition-opacity"></div>
-
-<!-- Quick Cart Drawer -->
-<section id="quick_cart" class="fixed top-[120px] right-0 h-[calc(100vh-120px)] w-[600px] bg-background z-50 transform translate-x-full transition-transform flex flex-col">
-  <!-- Header -->
-  <div class="flex justify-center items-center p-6 shrink-0">
-    <h2 class="text-h5 font-bold text-gray-900">Your Cart</h2>
-  </div>
-
-  <!-- Scrollable Content -->
-  <div class="flex-1 overflow-y-auto flex flex-col">
-    <!-- Cart Items -->
-    <div id="quick-cart-items" class="p-6 flex flex-col gap-6">
-      <div class="flex items-center justify-center py-10 text-gray-500">Your cart is empty.</div>
-    </div>
-
-    <!-- Footer -->
-    <div class="p-6 pt-0 flex justify-center items-center">
-      <a href="{{ routes.cart_url }}" 
-        class="w-[392px] h-[40px] bg-[#5A6D57] text-white text-center text-body-sm hover:bg-gray-800 transition cursor-pointer flex items-center justify-center">
-        Go to Cart
-      </a>
-    </div>
-  </div>
-</section>
-
-
 
 {% schema %}
 {
