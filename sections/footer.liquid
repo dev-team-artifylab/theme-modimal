@@ -1,12 +1,152 @@
-<div class="footer-section">
-    <p>This is Footer Menu</p>
-</div>
+<footer class="full-width px-6 md:px-12 py-10 bg-[#404040]">
+  <div class="flex flex-col gap-8 md:flex-row">
+    <!-- Left Area (40%) -->
+    <section class="w-full md:w-2.1/5 flex flex-col gap-6">
+      <div class="flex flex-col gap-4">
+        <h5 class="text-l font-semibold py-2 text-white">{{ section.settings.newsletter_title }}</h5>
+        {% form 'customer', class: 'w-full md:max-w-[390px] lg:max-w-[420px] flex flex-col gap-4' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
 
-{% schema  %} 
+          {%- comment -%} Email Input & Button Area {%- endcomment -%}
+          <div class="flex items-center justify-between border border-white px-4 py-2 gap-3">
+            <input
+              type="email"
+              name="contact[email]"
+              placeholder="Enter Your Email Address"
+              class="w-full text-xs bg-transparent outline-none placeholder:text-gray-300 text-white"
+              required
+            >
+            <button
+              type="submit"
+              aria-label="Submit"
+              class="shrink-0"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.8"
+                class="w-5 h-5 text-white"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          </div>
+
+          {%- comment -%} Consent Checkbox Area {%- endcomment -%}
+          <div class="flex items-start gap-3 mt-4">
+            <input
+              type="checkbox"
+              id="newsletter-consent"
+              class="mt-0.5 w-4 h-4 border-gray-300 rounded text-black focus:ring-black cursor-pointer"
+              required
+            >
+            <label
+              for="newsletter-consent"
+              class="max-w-[400px] text-xs leading-relaxed text-white cursor-pointer"
+            >
+              {{ section.settings.consent_text }}
+            </label>
+          </div>
+
+          {% if form.posted_successfully? %}
+            <p class="text-xs text-green-400 mt-2">Thanks for joining our club!</p>
+          {% endif %}
+        {% endform %}
+      </div>
+      <div class="flex flex-col gap-4">
+        {% render 'socials-handle' %}
+      </div>
+
+
+      <!-- Copyright -->
+      <p class="text-sm text-white">
+        &copy; {{ 'now' | date: '%Y' }}
+        {{ section.settings.copyright_text }}
+      </p>
+    </section>
+    <!-- Right Area (60%) -->
+    <section class="w-full md:w-2.9/5" aria-label="Footer Navigation">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-{{ section.blocks.size }} gap-6 text-white">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'link_list' %}
+              {% assign footer_menu = linklists[block.settings.menu] %}
+              {% if footer_menu != blank %}
+                <nav {{ block.shopify_attributes }}>
+                  <h5 class="text-sm font-semibold py-2">{{ footer_menu.title }}</h5>
+                  <ul class="flex flex-col gap-2 text-xs">
+                    {% for link in footer_menu.links %}
+                      <li>
+                        <a href="{{ link.url }}" class="hover:underline">{{ link.title }}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </nav>
+              {% endif %}
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</footer>
+{% schema %}
+{
+  "name": "Footer Version 1",
+  "max_blocks": 4,
+  "settings": [
     {
-        "name": "Footer Menu",
-        "settings": [
-
-        ]
+      "type": "header",
+      "content": "Newsletter Settings"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "newsletter_title",
+      "label": "Newsletter Heading",
+      "default": "Join our club, get 15% off for your Birthday"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "consent_text",
+      "label": "Consent Text",
+      "default": "By submitting your email, you agree to receive advertising emails from Modimal."
+    },
+    {
+      "type": "header",
+      "content": "Footer Bottom"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright Text",
+      "default": "Modimal. All Rights Reserved.",
+      "info": "Year will be added automatically"
     }
+  ],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Select Menu",
+          "default": "footer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer Menu",
+      "blocks": [{ "type": "link_list" }, { "type": "link_list" }, { "type": "link_list" }]
+    }
+  ]
+}
 {% endschema %}
