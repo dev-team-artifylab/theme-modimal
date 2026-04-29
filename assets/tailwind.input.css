@@ -80,3 +80,4 @@
 /* Overline */
 @utility text-overline-lg { @apply font-montserrat font-normal text-[var(--text-overline-lg)]; }
 @utility text-overline-sm { @apply font-montserrat font-semibold text-[var(--text-overline-sm)]; }
+

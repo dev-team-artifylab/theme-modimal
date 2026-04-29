@@ -9,22 +9,112 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
-      "disabled": true,
-      "settings": {}
-    },
     "collections_BEbV8M": {
       "type": "collections",
+      "disabled": true,
       "name": "t:general.collections_grid",
       "settings": {
         "grid_item_width": "collections--full",
         "grid_gap": 10
       }
+    },
+    "hero_Mdmn3A": {
+      "type": "hero",
+      "name": "Hero Section",
+      "settings": {
+        "image": "shopify://shop_images/5acf40a14ec616f602d9f91b003061a5deef40d0_80c18639-251b-4e09-80d5-97d4463f6daa.png",
+        "image_mobile": "shopify://shop_images/5acf40a14ec616f602d9f91b003061a5deef40d0_1.png",
+        "section_height": "medium",
+        "content_alignment": "left",
+        "vertical_alignment": "bottom",
+        "text_size": "medium",
+        "text_color": "#ffffff",
+        "overlay_opacity": 20,
+        "heading": "Elegance In Simplicity, Earth's Harmony",
+        "button_label": "New In",
+        "button_link": "shopify://collections/surplice-top"
+      }
+    },
+    "best_sellers_7ieEJm": {
+      "type": "best-sellers",
+      "name": "Best Sellers Collection",
+      "settings": {
+        "title": "Best Sellers",
+        "view_all_label": "View All",
+        "products_to_show": 3
+      }
+    },
+    "featured_collection_hmYEA3": {
+      "type": "featured-collection",
+      "name": "Featured Collections",
+      "settings": {
+        "title": "Collection",
+        "view_all_label": "View All",
+        "collection_1": "professional-women-s-outerwear",
+        "collection_2": "women-pants",
+        "collection_3": "t-shirt",
+        "collection_4": "women-s-smart-casual-wear"
+      }
+    },
+    "modiweek_rrTKPt": {
+      "type": "modiweek",
+      "blocks": {
+        "collection_block_FLtPME": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "sunday"
+          }
+        },
+        "collection_block_qLpbwf": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "sunday"
+          }
+        },
+        "collection_block_3MmLt6": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "sunday"
+          }
+        },
+        "collection_block_7iLDWC": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "sunday"
+          }
+        },
+        "collection_block_MERFGt": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "sunday"
+          }
+        },
+        "collection_block_8fpq4a": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "sunday"
+          }
+        }
+      },
+      "block_order": [
+        "collection_block_FLtPME",
+        "collection_block_qLpbwf",
+        "collection_block_3MmLt6",
+        "collection_block_7iLDWC",
+        "collection_block_MERFGt",
+        "collection_block_8fpq4a"
+      ],
+      "name": "Modiweek Collections",
+      "settings": {
+        "heading": "Modiweek"
+      }
     }
   },
   "order": [
-    "main",
-    "collections_BEbV8M"
+    "collections_BEbV8M",
+    "hero_Mdmn3A",
+    "best_sellers_7ieEJm",
+    "featured_collection_hmYEA3",
+    "modiweek_rrTKPt"
   ]
 }

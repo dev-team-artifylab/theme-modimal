@@ -10,13 +10,11 @@
     <!-- Product Listing -->
     <section aria-label="Product list">
 
-      <div class="grid grid-cols-2 gap-6">
-        {% for product in collection.products %}
-          <article>
-            {% render 'product-card', product: product %}
-          </article>
-        {% endfor %}
-      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {% for product in collections.all.products %}
+    {% render 'product-card', product: product %}
+  {% endfor %}
+</div>
 
     </section>
 
