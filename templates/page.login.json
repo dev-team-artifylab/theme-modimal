@@ -1,0 +1,8 @@
+{
+  "sections": {
+    "main": {
+      "type": "custom-login-page"
+    }
+  },
+  "order": ["main"]
+}
