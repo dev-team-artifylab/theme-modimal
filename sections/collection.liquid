@@ -1,23 +1,19 @@
 <main class="max-w-7xl mx-auto px-4 py-10">
+  <div class="grid grid-cols-[392px_1fr] gap-10">
 
-  <div class="grid grid-cols-[260px_1fr] gap-10">
-
-    <!-- Sidebar (Filters) -->
-    <aside aria-label="Product filters">
+    <!-- Sidebar -->
+    <aside class="flex flex-col gap-4">
       {% render 'filter-sidebar' %}
     </aside>
 
-    <!-- Product Listing -->
-    <section aria-label="Product list">
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-  {% for product in collections.all.products %}
-    {% render 'product-card', product: product %}
-  {% endfor %}
-</div>
-
+    <!-- Products -->
+    <section>
+      <div class="grid grid-cols-2 gap-6">
+        {% for product in collection.products %}
+          {% render 'product-card', product: product %}
+        {% endfor %}
+      </div>
     </section>
 
   </div>
-
 </main>

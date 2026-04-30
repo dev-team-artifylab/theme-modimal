@@ -1,89 +1,68 @@
-<form id="CollectionFiltersForm" class="space-y-6">
+<form id="CollectionFiltersForm" class="flex flex-col gap-6">
+
   <!-- Header -->
-  <div class="flex items-center justify-between mb-4">
+  <div>
     <h2 class="text-xl font-semibold">Filters</h2>
   </div>
 
-  <!-- Top Bar (Applied Filters + Actions) -->
-  {% if collection.filters != empty %}
-    <div class="flex items-center justify-between flex-wrap gap-3">
-      <!-- Left: Applied Filters -->
-      <div class="flex flex-wrap gap-2">
-        {% for filter in collection.filters %}
-          {% for value in filter.active_values %}
-            <a
-              href="{{ value.url_to_remove }}"
-              class="px-3 py-1 bg-gray-200 text-sm rounded-full flex items-center gap-2 hover:bg-gray-300 transition"
-            >
-              {{ value.label }}
-              <span>✕</span>
-            </a>
-          {% endfor %}
-        {% endfor %}
-      </div>
+  <!-- Actions -->
+  <div class="flex items-center justify-between">
+    <a href="{{ collection.url }}" class="text-sm underline text-gray-500">
+      Clear all
+    </a>
 
-      <!-- Right: Actions -->
-      <div class="flex items-center gap-4">
-        <!-- Clear All -->
-        <a
-          href="{{ collection.url }}"
-          class="text-sm underline text-gray-500 hover:text-black"
-        >
-          Clear all
-        </a>
+    <button
+      type="submit"
+      class="flex items-center justify-center gap-1 w-[184px] h-[40px] px-4 bg-[#5A6D57] text-white text-sm font-medium rounded-md hover:opacity-90 transition"
+    >
+      Apply Filters →
+    </button>
+  </div>
 
-        <!-- Apply Button -->
-        <button
-          type="submit"
-          class="flex items-center justify-center gap-1 w-[184px] h-[40px] px-4 bg-[#5A6D57] text-white text-sm font-medium rounded-md hover:opacity-90 transition"
-        >
-          Apply Filters
-          <span>→</span>
-        </button>
-      </div>
-    </div>
-  {% endif %}
+  <!-- Filters -->
+  <div class="flex flex-col gap-4">
 
-  <!-- Filters List -->
   {% for filter in collection.filters %}
-    <div class="border-b pb-4">
-      <!-- Title -->
+    <div class="filter-item rounded-md transition">
+
+      <!-- Header -->
       <button
         type="button"
-        class="filter-toggle flex justify-between w-full font-semibold text-gray-800"
+        class="filter-toggle flex items-center justify-between w-full h-[48px] px-4 bg-[#748C70] text-white text-[16px] font-bold rounded-md transition"
       >
         {{ filter.label }}
-        <span class="icon">+</span>
+        <span class="icon text-lg">+</span>
       </button>
 
-      <!-- Options -->
-      <div
-        class="
-          filter-content mt-3 space-y-2
-          {% unless filter.active_values.size > 0 %}hidden{% endunless %}
-        "
-      >
+      <!-- Content -->
+      <div class="filter-content hidden mt-2 px-4 pb-4 space-y-2">
+
         {% for value in filter.values %}
-          <label class="flex items-center justify-between text-sm text-gray-600 cursor-pointer group">
+          <label class="flex items-center justify-between text-[16px] text-regular font-regular">
+
             <div class="flex items-center gap-2">
               <input
                 type="checkbox"
                 name="{{ filter.param_name }}"
                 value="{{ value.value }}"
-                {% if value.active %}
-                  checked
-                {% endif %}
+                {% if value.active %}checked{% endif %}
                 class="accent-[#A2B39F]"
               >
-              <span class="group-hover:text-black transition">
-                {{ value.label }}
-              </span>
+              <span>{{ value.label }}</span>
             </div>
 
-            <span class="text-gray-400 text-xs"> ({{ value.count }}) </span>
+            <span class="text-gray-400">
+              ({{ value.count }})
+            </span>
+
           </label>
         {% endfor %}
+
       </div>
+
     </div>
   {% endfor %}
+
+</div>
+
 </form>
