@@ -66,19 +66,27 @@
       </a>
 
       <!-- Profile -->
-      <a href="{{ routes.account_url }}" class="icon-account hidden md:block" aria-label="Account">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-5 h-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="1.8"
-        >
-          <circle cx="12" cy="8" r="4"></circle>
-          <path d="M4 20C4 16.7 7.1 14 12 14C16.9 14 20 16.7 20 20"></path>
-        </svg>
-      </a>
+{% if customer %}
+  <a href="{{ routes.account_url }}" class="icon-account hidden md:block" aria-label="Account">
+{% else %}
+  {% comment %} 
+    Ensure '/pages/login' matches the URL handle of the page 
+    you created with the 'page.login.json' template.
+  {% endcomment %}
+  <a href="/pages/login" class="icon-account hidden md:block" aria-label="Account">
+{% endif %}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="w-5 h-5"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="1.8"
+    >
+      <circle cx="12" cy="8" r="4"></circle>
+      <path d="M4 20C4 16.7 7.1 14 12 14C16.9 14 20 16.7 20 20"></path>
+    </svg>
+  </a>
 
       <!-- Wishlist -->
       <a href="/pages/wishlist" class="icon-wishlist hidden md:block" aria-label="Wishlist">

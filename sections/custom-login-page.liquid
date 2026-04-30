@@ -1,0 +1,97 @@
+<div class="max-w-[1400px] mx-auto px-6 py-20">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+    
+    <!-- Left Column: Image -->
+    <div class="hidden md:block">
+      {% if section.settings.image != blank %}
+        <img src="{{ section.settings.image | image_url: width: 1000 }}" 
+             alt="{{ section.settings.image.alt }}" 
+             class="w-full h-auto object-cover">
+      {% else %}
+        <div class="w-full aspect-[4/5] bg-gray-100 flex items-center justify-center">
+          <p class="text-gray-400 font-medium">Select Image in Editor</p>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Right Column: Form -->
+    <div class="max-w-[480px] mx-auto w-full text-center">
+      <h1 class="text-[42px] font-bold tracking-tight mb-10 text-black">Log In</h1>
+      
+      {% form 'customer_login', id: 'CustomerLoginForm' %}
+        {% if form.errors %}
+          <div class="text-red-600 text-sm mb-4 text-left p-3 bg-red-50 border border-red-200">
+            {{ form.errors | default_errors }}
+          </div>
+        {% endif %}
+
+        <div class="flex flex-col gap-4">
+          <input type="email" 
+                 name="customer[email]" 
+                 placeholder="Email" 
+                 class="w-full p-4 border border-gray-500 text-gray-700 placeholder-gray-400 outline-none focus:border-black transition-all"
+                 required>
+          
+          <div class="relative">
+            <input type="password" 
+                   name="customer[password]" 
+                   placeholder="Password" 
+                   class="w-full p-4 border border-gray-500 text-gray-700 placeholder-gray-400 outline-none focus:border-black transition-all"
+                   required>
+            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+              </svg>
+            </span>
+          </div>
+
+          <div class="text-right">
+             <a href="/account/login#recover" class="text-sm text-gray-500 hover:text-black underline">Forgot Your Password?</a>
+          </div>
+          
+          <button type="submit" class="w-full bg-[#5d6b59] text-white py-4 mt-2 font-medium text-lg tracking-wide hover:bg-[#4a5647] transition-colors cursor-pointer">
+            Log In
+          </button>
+        </div>
+      {% endform %}
+
+      <div class="mt-8 flex justify-center items-center gap-4 text-lg text-[#333]">
+        <p>New To Madimal?</p>
+        <a href="/pages/register" class="text-[#5d6b59] hover:underline font-bold">Create An Account</a>
+      </div>
+
+      <div class="my-8 text-gray-500 text-lg italic text-center">Or</div>
+
+      <!-- Social Login Icons -->
+      <div class="flex justify-center gap-6 mb-10">
+        <div class="w-12 h-12 flex items-center justify-center rounded-full border border-gray-200 cursor-pointer hover:shadow-md transition-shadow">
+          <img src="https://cdn-icons-png.flaticon.com/512/0/747.png" class="w-6 h-6" alt="Apple">
+        </div>
+        <div class="w-12 h-12 flex items-center justify-center rounded-full border border-gray-200 cursor-pointer hover:shadow-md transition-shadow">
+          <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" class="w-6 h-6" alt="Google">
+        </div>
+        <div class="w-12 h-12 flex items-center justify-center rounded-full border border-gray-200 cursor-pointer hover:shadow-md transition-shadow">
+          <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" class="w-6 h-6" alt="Facebook">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom Login",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Display Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Login"
+    }
+  ]
+}
+{% endschema %}
