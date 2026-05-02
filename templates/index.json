@@ -108,6 +108,23 @@
       "settings": {
         "heading": "Modiweek"
       }
+    },
+    "hero_xdNq6z": {
+      "type": "hero",
+      "name": "Hero Section",
+      "settings": {
+        "image": "shopify://shop_images/hero-2.jpg",
+        "image_mobile": "shopify://shop_images/73343a2e46a3292a688d377f709b49925f785870.jpg",
+        "section_height": "medium",
+        "content_alignment": "right",
+        "vertical_alignment": "bottom",
+        "text_size": "medium",
+        "text_color": "#ffffff",
+        "overlay_opacity": 20,
+        "heading": "Elegance In Simplicity",
+        "button_label": "Shop Now",
+        "button_link": ""
+      }
     }
   },
   "order": [
@@ -115,6 +132,7 @@
     "hero_Mdmn3A",
     "best_sellers_7ieEJm",
     "featured_collection_hmYEA3",
-    "modiweek_rrTKPt"
+    "modiweek_rrTKPt",
+    "hero_xdNq6z"
   ]
 }
