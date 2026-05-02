@@ -1,20 +1,58 @@
 <form id="CollectionFiltersForm" class="flex flex-col gap-6">
 
-  <!-- Header -->
-  <div>
-    <h2 class="text-xl font-semibold">Filters</h2>
-  </div>
+  <h2 class="text-[32px] font-semibold">Filters</h2>
+
+  {% assign has_active = false %}
+  {% for filter in collection.filters %}
+    {% if filter.active_values.size > 0 %}
+      {% assign has_active = true %}
+    {% endif %}
+    {% if filter.type == 'price_range' %}
+      {% if filter.min_value.value or filter.max_value.value %}
+        {% assign has_active = true %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+
+  <!-- 🔥 Chips -->
+  {% if has_active %}
+    <div class="flex flex-wrap gap-2">
+
+      {% for filter in collection.filters %}
+
+        {% if filter.type == 'price_range' %}
+          {% if filter.min_value.value or filter.max_value.value %}
+            <a href="{{ collection.url }}" class="px-3 py-1 bg-gray-200 text-sm rounded">
+
+              Tk {{ filter.min_value.value | default: 0 | divided_by: 1000 }}
+              -
+              {{ filter.max_value.value | default: filter.range_max | divided_by: 1000 }} ✕
+
+            </a>
+          {% endif %}
+        {% else %}
+          {% for value in filter.active_values %}
+            <a href="{{ value.url_to_remove }}" class="px-3 py-1 bg-gray-200 text-sm rounded">
+              {{ value.label }} ✕
+            </a>
+          {% endfor %}
+        {% endif %}
+
+      {% endfor %}
+
+    </div>
+  {% endif %}
 
   <!-- Actions -->
-  <div class="flex items-center justify-between">
-    <a href="{{ collection.url }}" class="text-sm underline text-gray-500">
-      Clear all
-    </a>
+  <div class="flex justify-between items-center">
+    {% if has_active %}
+      <a href="{{ collection.url }}" class="text-sm underline">Clear All Filters</a>
+    {% else %}
+      <span></span>
+    {% endif %}
 
-    <button
-      type="submit"
-      class="flex items-center justify-center gap-1 w-[184px] h-[40px] px-4 bg-[#5A6D57] text-white text-sm font-medium rounded-md hover:opacity-90 transition"
-    >
+    <button id="applyBtn" type="submit"
+      class="hidden px-4 py-2 bg-[#5A6D57] text-white rounded cursor-pointer">
       Apply Filters →
     </button>
   </div>
@@ -22,47 +60,97 @@
   <!-- Filters -->
   <div class="flex flex-col gap-4">
 
-  {% for filter in collection.filters %}
-    <div class="filter-item rounded-md transition">
+    {% for filter in collection.filters %}
+      <div class="filter-item">
 
-      <!-- Header -->
-      <button
-        type="button"
-        class="filter-toggle flex items-center justify-between w-full h-[48px] px-4 bg-[#748C70] text-white text-[16px] font-bold rounded-md transition"
-      >
-        {{ filter.label }}
-        <span class="icon text-lg">+</span>
-      </button>
+        <button type="button"
+          class="filter-toggle flex justify-between w-full px-4 py-3 bg-[#748C70] text-white font-bold rounded">
+          {{ filter.label }}
+          <span class="icon">+</span>
+        </button>
 
-      <!-- Content -->
-      <div class="filter-content hidden mt-2 px-4 pb-4 space-y-2">
+        <div class="filter-content hidden mt-2 px-4 pb-4 space-y-4">
 
-        {% for value in filter.values %}
-          <label class="flex items-center justify-between text-[16px] text-regular font-regular">
+          {% if filter.type == 'price_range' %}
 
-            <div class="flex items-center gap-2">
-              <input
-                type="checkbox"
-                name="{{ filter.param_name }}"
-                value="{{ value.value }}"
-                {% if value.active %}checked{% endif %}
-                class="accent-[#A2B39F]"
-              >
-              <span>{{ value.label }}</span>
+            <!-- Highest -->
+            <p class="text-sm">
+              Highest: Tk {{ filter.range_max | divided_by: 100 }}
+            </p>
+
+            <!-- Slider -->
+            <div class="relative h-6">
+
+              <div class="absolute w-full h-[4px] bg-gray-300 top-1/2 -translate-y-1/2 rounded"></div>
+
+              <div id="slider-track"
+                class="absolute h-[4px] bg-[#748C70] top-1/2 -translate-y-1/2 rounded"></div>
+
+              <!-- MIN -->
+              <input type="range"
+                min="0"
+                max="{{ filter.range_max | divided_by: 100 }}"
+                value="{{ filter.min_value.value | default: 0 | divided_by: 100 }}"
+                class="range-min absolute w-full">
+
+              <!-- MAX -->
+              <input type="range"
+                min="0"
+                max="{{ filter.range_max | divided_by: 100 }}"
+                value="{{ filter.max_value.value | default: filter.range_max | divided_by: 100 }}"
+                class="range-max absolute w-full">
+
             </div>
 
-            <span class="text-gray-400">
-              ({{ value.count }})
-            </span>
+            <!-- Inputs -->
+            <div class="flex gap-3">
 
-          </label>
-        {% endfor %}
+              <div class="flex items-center bg-gray-200 px-4 py-2 rounded-full w-full">
+                <span>TK</span>
+                <input
+                  type="number"
+                  name="{{ filter.min_value.param_name }}"
+                  value="{{ filter.min_value.value | default: 0 | divided_by: 100 }}"
+                  class="min-input w-full bg-transparent outline-none ml-2">
+              </div>
+
+              <div class="flex items-center bg-gray-200 px-4 py-2 rounded-full w-full">
+                <span>TK</span>
+                <input
+                  type="number"
+                  name="{{ filter.max_value.param_name }}"
+                  value="{{ filter.max_value.value | default: filter.range_max | divided_by: 100 }}"
+                  class="max-input w-full bg-transparent outline-none ml-2">
+              </div>
+
+            </div>
+
+          {% else %}
+
+            {% for value in filter.values %}
+              <label class="flex justify-between">
+
+                <div class="flex gap-2">
+                  <input type="checkbox"
+                    name="{{ filter.param_name }}"
+                    value="{{ value.value }}"
+                    {% if value.active %}checked{% endif %}
+                    class="filter-checkbox">
+                  {{ value.label }}
+                </div>
+
+                <span>({{ value.count }})</span>
+
+              </label>
+            {% endfor %}
+
+          {% endif %}
+
+        </div>
 
       </div>
+    {% endfor %}
 
-    </div>
-  {% endfor %}
-
-</div>
+  </div>
 
 </form>
