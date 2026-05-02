@@ -1,4 +1,4 @@
-<header class="site-header bg-gray-100 full-width h-auto lg:min-h-[80px]">
+<header class="site-header bg-gray-100 full-width h-auto lg:min-h-[80px] relative z-40">
   <div class="header-container flex items-center justify-between md:justify-evenly px-2 lg:px-4 py-2 md:py-3 lg:py-5">
     <div class="">
       <a href="{{ routes.root_url }}" class="block">
@@ -235,8 +235,22 @@
       if (!cartDrawer) return;
       if (isOpen) {
         cartDrawer.classList.remove('translate-x-full');
+        if (overlay) {
+          overlay.classList.remove('hidden');
+          overlay.classList.add('backdrop-blur-md'); // Add blur for cart
+          setTimeout(() => overlay.classList.add('opacity-100'), 10);
+        }
+        document.body.classList.add('overflow-hidden');
       } else {
         cartDrawer.classList.add('translate-x-full');
+        if (overlay) {
+          overlay.classList.remove('opacity-100');
+          setTimeout(() => {
+            overlay.classList.add('hidden');
+            overlay.classList.remove('backdrop-blur-md');
+          }, 300);
+        }
+        document.body.classList.remove('overflow-hidden');
       }
     };
 
@@ -244,7 +258,8 @@
       cartToggle.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        window.toggleCartDrawer(true);
+        const isOpen = !cartDrawer.classList.contains('translate-x-full');
+        window.toggleCartDrawer(!isOpen);
       });
     }
 
@@ -258,10 +273,11 @@
       });
     }
 
-    // Unified overlay click listener for Nav Drawer ONLY
+    // Unified overlay click listener for Nav Drawer and Cart Drawer
     if (overlay) {
       overlay.addEventListener('click', () => {
         toggleDrawer(false);            // Close Nav Drawer
+        window.toggleCartDrawer(false); // Close Cart Drawer
       });
     }
 
