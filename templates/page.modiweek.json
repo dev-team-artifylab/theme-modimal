@@ -1,0 +1,16 @@
+{
+  "name": "Modiweek Page",
+  "sections": {
+    "featured_area": {
+      "type": "modiweek-page-manager" 
+    },
+    "slider_area": {
+      "type": "modiweek",
+    
+    }
+  },
+  "order": [
+    "featured_area",
+    "slider_area"
+  ]
+}
