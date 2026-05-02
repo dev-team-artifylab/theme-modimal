@@ -16,7 +16,7 @@
         <div class="flex-shrink-0 snap-start w-[220px] md:w-[240px] xl:w-[288px]" {{ block.shopify_attributes }}>
           
           <div class="relative w-full aspect-[3/4.4] overflow-hidden bg-[#f3f3f3] group/item">
-            <a href="{{ collection.url | default: '#' }}" class="block w-full h-full">
+            <a href="?day={{ collection.handle }}" class="block w-full h-full">
               {%- if collection.featured_image -%}
                 <img
                   src="{{ collection.featured_image | image_url: width: 800 }}"
