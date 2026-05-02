@@ -15,7 +15,55 @@
     },
     "slider_area": {
       "type": "modiweek",
-      "settings": {}
+      "blocks": {
+        "collection_block_hpmdwT": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "sunday"
+          }
+        },
+        "collection_block_PakiDX": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "saturday"
+          }
+        },
+        "collection_block_NiFbnd": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "sunday"
+          }
+        },
+        "collection_block_A7VaFD": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "saturday"
+          }
+        },
+        "collection_block_iciGnM": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "saturday"
+          }
+        },
+        "collection_block_BUaEJT": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "sunday"
+          }
+        }
+      },
+      "block_order": [
+        "collection_block_hpmdwT",
+        "collection_block_PakiDX",
+        "collection_block_NiFbnd",
+        "collection_block_A7VaFD",
+        "collection_block_iciGnM",
+        "collection_block_BUaEJT"
+      ],
+      "settings": {
+        "heading": "Our Collections"
+      }
     }
   },
   "order": [
