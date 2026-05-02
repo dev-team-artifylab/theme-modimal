@@ -118,9 +118,9 @@
         "section_height": "medium",
         "content_alignment": "right",
         "vertical_alignment": "bottom",
-        "text_size": "medium",
-        "text_color": "#ffffff",
-        "overlay_opacity": 20,
+        "text_size": "small",
+        "text_color": "#333333",
+        "overlay_opacity": 30,
         "heading": "Elegance In Simplicity",
         "button_label": "Shop Now",
         "button_link": ""
