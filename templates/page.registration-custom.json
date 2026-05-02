@@ -12,9 +12,17 @@
     "main": {
       "type": "page",
       "settings": {}
+    },
+    "custom_register_page_zUh7FL": {
+      "type": "custom-register-page",
+      "name": "Custom Register",
+      "settings": {
+        "image": "shopify://shop_images/Frame_26086866.png"
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "custom_register_page_zUh7FL"
   ]
 }
