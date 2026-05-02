@@ -120,3 +120,37 @@ body {
   transform: rotate(45deg);
   transition: transform 0.3s ease;
 }
+
+
+/* 🔥 Remove default style */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+}
+
+/* 🔥 Track (gray background already div দিয়ে করছো, so transparent রাখো) */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  background: transparent;
+}
+
+/* 🔥 Thumb (circle) */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  background: #748C70;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -6px;
+}
+
+/* Firefox */
+input[type="range"]::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  background: #748C70;
+  border-radius: 50%;
+  cursor: pointer;
+}
