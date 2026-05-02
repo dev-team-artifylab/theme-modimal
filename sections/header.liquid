@@ -1,4 +1,4 @@
-<header class="site-header bg-gray-100 full-width h-auto lg:min-h-[80px]">
+<header class="site-header bg-gray-100 full-width h-auto lg:min-h-[80px] relative z-40">
   <div class="header-container flex items-center justify-between md:justify-evenly px-2 lg:px-4 py-2 md:py-3 lg:py-5">
     <div class="">
       <a href="{{ routes.root_url }}" class="block">
@@ -66,19 +66,27 @@
       </a>
 
       <!-- Profile -->
-      <a href="{{ routes.account_url }}" class="icon-account hidden md:block" aria-label="Account">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-5 h-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="1.8"
-        >
-          <circle cx="12" cy="8" r="4"></circle>
-          <path d="M4 20C4 16.7 7.1 14 12 14C16.9 14 20 16.7 20 20"></path>
-        </svg>
-      </a>
+{% if customer %}
+  <a href="{{ routes.account_url }}" class="icon-account hidden md:block" aria-label="Account">
+{% else %}
+  {% comment %} 
+    Ensure '/pages/login' matches the URL handle of the page 
+    you created with the 'page.login.json' template.
+  {% endcomment %}
+  <a href="/pages/login" class="icon-account hidden md:block" aria-label="Account">
+{% endif %}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="w-5 h-5"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="1.8"
+    >
+      <circle cx="12" cy="8" r="4"></circle>
+      <path d="M4 20C4 16.7 7.1 14 12 14C16.9 14 20 16.7 20 20"></path>
+    </svg>
+  </a>
 
       <!-- Wishlist -->
       <a href="/pages/wishlist" class="icon-wishlist hidden md:block" aria-label="Wishlist">
@@ -93,9 +101,8 @@
           <path d="M12 21s-7-4.35-9.5-8.28C.5 9.5 2.42 5.5 6.5 5.5c2.28 0 4.1 1.32 5.5 3.09C13.4 6.82 15.22 5.5 17.5 5.5c4.08 0 6 4 4 7.22C19 16.65 12 21 12 21z"></path>
         </svg>
       </a>
-
       <!-- Cart -->
-      <a href="{{ routes.cart_url }}" class="icon-cart hidden md:block relative" aria-label="Cart">
+      <button id="cart-toggle" class="icon-cart hidden md:block relative cursor-pointer" aria-label="Cart">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="w-5 h-5"
@@ -111,7 +118,7 @@
         <span id="desktop-cart-count" class="absolute -top-2 -right-2 bg-[#5A6D57] text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full {% if cart.item_count == 0 %}hidden{% endif %}">
           {{ cart.item_count }}
         </span>
-      </a>
+      </button>
     </div>
   </div>
 </header>
@@ -177,7 +184,7 @@
       </svg>
       Wishlist
     </a>
-    <a href="{{ routes.cart_url }}" class="flex items-center gap-2 text-sm text-gray-600">
+    <a href="{{ routes.cart_url }}" id="mobile-cart-toggle" class="flex items-center gap-2 text-sm text-gray-600">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
       </svg>
@@ -219,14 +226,85 @@
     // Event Listeners
     if (openBtn) openBtn.addEventListener('click', () => toggleDrawer(true));
     if (closeBtn) closeBtn.addEventListener('click', () => toggleDrawer(false));
-    if (overlay) overlay.addEventListener('click', () => toggleDrawer(false));
 
-    // Optional: Close on ESC key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !drawer.classList.contains('-translate-x-full')) {
-        toggleDrawer(false);
+    // --- Cart Drawer Logic ---
+    const cartToggle = document.getElementById('cart-toggle');
+    const cartDrawer = document.getElementById('cart-drawer');
+
+    window.toggleCartDrawer = function(isOpen) {
+      if (!cartDrawer) return;
+      if (isOpen) {
+        cartDrawer.classList.remove('translate-x-full');
+        if (overlay) {
+          overlay.classList.remove('hidden');
+          overlay.classList.add('backdrop-blur-md'); // Add blur for cart
+          setTimeout(() => overlay.classList.add('opacity-100'), 10);
+        }
+        document.body.classList.add('overflow-hidden');
+      } else {
+        cartDrawer.classList.add('translate-x-full');
+        if (overlay) {
+          overlay.classList.remove('opacity-100');
+          setTimeout(() => {
+            overlay.classList.add('hidden');
+            overlay.classList.remove('backdrop-blur-md');
+          }, 300);
+        }
+        document.body.classList.remove('overflow-hidden');
+      }
+    };
+
+    if (cartToggle) {
+      cartToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isOpen = !cartDrawer.classList.contains('translate-x-full');
+        window.toggleCartDrawer(!isOpen);
+      });
+    }
+
+    const mobileCartToggle = document.getElementById('mobile-cart-toggle');
+    if (mobileCartToggle) {
+      mobileCartToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleDrawer(false); // Close Nav Drawer
+        window.toggleCartDrawer(true); // Open Cart Drawer
+      });
+    }
+
+    // Unified overlay click listener for Nav Drawer and Cart Drawer
+    if (overlay) {
+      overlay.addEventListener('click', () => {
+        toggleDrawer(false);            // Close Nav Drawer
+        window.toggleCartDrawer(false); // Close Cart Drawer
+      });
+    }
+
+    // Document click listener to close Cart Drawer when clicking outside
+    document.addEventListener('click', (e) => {
+      // If the cart drawer is open, and the click is NOT inside the drawer,
+      // and NOT on the toggle buttons, close it.
+      if (cartDrawer && !cartDrawer.classList.contains('translate-x-full')) {
+        const isClickInside = cartDrawer.contains(e.target);
+        if (!isClickInside) {
+          window.toggleCartDrawer(false);
+        }
       }
     });
+
+    // Unified ESC key listener for both drawers
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (drawer && !drawer.classList.contains('-translate-x-full')) {
+          toggleDrawer(false);
+        }
+        if (cartDrawer && !cartDrawer.classList.contains('translate-x-full')) {
+          window.toggleCartDrawer(false);
+        }
+      }
+    });
+
   });
 </script>
 {% schema %}
