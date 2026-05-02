@@ -89,7 +89,12 @@
   </a>
 
       <!-- Wishlist -->
-      
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when '@app' -%}
+            {% render block %}
+        {%- endcase -%}
+      {%- endfor -%}
 
       <!-- Cart -->
       <button id="cart-toggle" class="icon-cart hidden md:block relative cursor-pointer" aria-label="Cart">
