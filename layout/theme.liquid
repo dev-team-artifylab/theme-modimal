@@ -25,12 +25,15 @@
     {% render 'meta-tags' %}
 
     {{ content_for_header }}
+    {% render 'quick_product_cart' %}
   </head>
 
   
 
   <body>
-    {% sections 'header-group' %}
+    {% unless request.page_type == 'cart' %}
+      {% sections 'header-group' %}
+    {% endunless %}
 
     {{ content_for_layout }}
 

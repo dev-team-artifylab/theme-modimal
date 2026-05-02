@@ -1,0 +1,45 @@
+<div class="flex items-start gap-4 p-4">
+  <!-- Image -->
+  <a href="{{ item.url }}" class="shrink-0">
+    <img
+      src="{{ item.image | image_url: width: 300 }}"
+      alt="{{ item.title | escape }}"
+      class="w-[120px] h-[155px] md:w-[142px] md:h-[163px] object-cover"
+      width="142"
+      height="163"
+      loading="lazy"
+    >
+  </a>
+
+  <!-- Title + Variant -->
+
+  <div class="flex justify-between w-full">
+    <div class="flex flex-col gap-1 pt-1">
+    <h2 class="h-6 font-bold text-gray-900 leading-snug">
+      <a href="{{ item.url }}" class="hover:text-[#5A6D57] transition-colors">{{ item.product.title }}</a>
+    </h2>
+    {% unless item.variant.title == 'Default Title' %}
+      {% for option in item.product.options_with_values %}
+        {% assign option_index = forloop.index0 %}
+        <p class="text-body-md text-gray-500">
+          {{ option.name }}: {{ item.variant.options[option_index] }}
+        </p>
+      {% endfor %}
+    {% endunless %}
+  </div>
+
+  <!-- Remove Button -->
+  <button
+    type="button"
+    class="cart-remove ml-auto self-start mt-1 cursor-pointer"
+    data-line="{{ line_index }}"
+    aria-label="Remove {{ item.title }}"
+  >
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+    </svg>
+  </button>
+  </div>
+
+  
+</div>

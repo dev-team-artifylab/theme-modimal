@@ -1,37 +1,269 @@
-{% comment %}
-  This section is used in the cart template to render /cart page with an
-  overview of the items in customer's cart.
+<section class="w-full">
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/cart
-{% endcomment %}
 
-<h1>{{ 'cart.title' | t }}</h1>
+    <div class="h-[150px] flex items-center">
+      <a href="{{ routes.root_url }}" class="block">
+        <img src="{{'Logo.png' | asset_url}}" alt="logo" class="h-auto max-w-[120px] md:max-w-[184px] object-contain">
+      </a>
+    </div>
 
-<form action="{{ routes.cart_url }}" method="post">
-  <table>
-    {% for item in cart.items %}
-      <tr>
-        <td>
-          {% render 'image', image: item.image, url: item.url %}
-        </td>
-        <td>
-          <p>{{ item.product.title }}</p>
-          {{ 'cart.remove' | t | link_to: item.url_to_remove }}
-        </td>
-        <td>
-          <input type="text" name="updates[]" value="{{ item.quantity }}">
-          <input type="submit" value="{{ 'cart.update' | t }}">
-        </td>
-      </tr>
-    {% endfor %}
-  </table>
+ <!-- Header Section -->
+  <div class="flex w-full px-4 items-center justify-between font-montserrat">
+    <div class="flex gap-[24px]">
+      <button id="back-btn" class="text-body-sm text-gray-500 cursor-pointer ">Back</button>
+      <h3 class="text-h3 font-semibold md:text-h5">Your Cart</h3>
+    </div>
+    <button id="continue-shopping" class="text-body-sm text-gray-500 cursor-pointer">Continue Shopping</button>
+  </div>
 
-  <input type="submit" name="checkout" value="{{ 'cart.checkout' | t }}">
-</form>
 
-{% schema %}
-{
-  "name": "t:general.cart",
-  "settings": []
-}
-{% endschema %}
+  {% if cart.item_count > 0 %}
+
+    {% comment %} Product Title {% endcomment %}
+
+    <div class="flex justify-between w-full border-b border-gray-200">
+      <p class="w-1/2 text-body-lg p-4">
+        order summary
+      </p>
+      <div class="flex items-center justify-between w-1/2 p-4">
+        <p class="text-body-lg">Price</p>
+        <p class="text-body-lg">Quantity</p>
+        <p class="text-body-lg">Total</p>
+      </div>
+    </div>
+
+
+    <div class="flex justify-between">
+
+      <div class="w-1/2">
+        {% for item in cart.items %}
+          <div class="cart-item-row" data-item-key="{{ item.key }}">
+            {% render 'product_card', item: item, line_index: forloop.index %}
+          </div>
+        {% endfor %}
+      </div>
+
+     <div class="w-1/2 flex flex-col gap-6 p-4">
+
+  <!-- Cart Items -->
+  {% for item in cart.items %}
+    <div class="cart-detail-row flex items-start justify-between gap-4" data-item-key="{{ item.key }}">
+      {% render 'cart_details', item: item, line_index: forloop.index %}
+    </div>
+  {% endfor %}
+
+  <!-- Divider -->
+  <div class="border-t border-gray-300"></div>
+
+  <!-- Pricing Summary -->
+  <div id="cart-summary" class="flex flex-col gap-3 text-body-lg">
+
+    <div class="flex justify-between">
+      <p>Subtotal</p>
+      <p id="cart-subtotal">{{ cart.total_price | money }}</p>
+    </div>
+
+    <div class="flex justify-between text-gray-600">
+      <p>Tax</p>
+      <p id="cart-tax">
+        {% if cart.tax_price > 0 %}
+          {{ cart.tax_price | money }}
+        {% else %}
+          Tk 50
+        {% endif %}
+      </p>
+    </div>
+
+    <div class="flex justify-between text-gray-600">
+      <p>Shipping</p>
+      <p class="font-medium">
+        {% if cart.shipping_price > 0 %}
+          {{ cart.shipping_price | money }}
+        {% else %}
+          Free
+        {% endif %}
+      </p>
+    </div>
+
+    <!-- Total -->
+    <div class="flex justify-between text-body-lg">
+      <p>Total Orders:</p>
+      <p id="cart-total">{{ cart.total_price | money }}</p>
+    </div>
+
+  </div>
+
+  <!-- Info Text -->
+  <p class="text-body-xs font-semibold leading-relaxed">
+    The total amount you pay includes all applicable customs duties & taxes.
+    We guarantee no additional charges on delivery.
+  </p>
+
+  <!-- Button -->
+  <button class="w-full h-[40px] flex items-center justify-end">
+    <a href="/checkout" class="w-[184px] h-full flex items-center justify-center bg-[#5A6D57] text-white">Next</a>
+  </button>
+
+</div>
+
+    </div>
+
+  {% else %}
+
+    <!-- empty cart -->
+        <div>
+
+          <h3> Your cart is empty</h3>
+          <p>Start filling it up with your favorites.</p>
+          <button><a href="{{ routes.root_url }}">Shop Now</a></button>
+
+        </div>
+
+
+  {% endif %}
+
+</section>
+
+<script>
+
+    const backBtn = document.getElementById('back-btn');
+    const continueShopping = document.getElementById('continue-shopping');
+
+    backBtn.addEventListener('click', function() {
+        window.history.back();
+    });
+
+    continueShopping.addEventListener('click', function() {
+        window.location.href = "/checkout";
+    });
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+
+  /* ── helpers ─────────────────────────────────────────── */
+  function formatMoney(cents) {
+    var amount = (cents / 100).toFixed(2);
+    return '{{ cart.currency.iso_code }} ' + amount;
+  }
+
+  function updateCart(key, quantity) {
+    return fetch('/cart/change.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: key, quantity: quantity })
+    }).then(function(r) { return r.json(); });
+  }
+
+  /* find the item-key for a button inside a [data-item-key] wrapper */
+  function keyFromBtn(btn) {
+    var row = btn.closest('[data-item-key]');
+    return row ? row.getAttribute('data-item-key') : null;
+  }
+
+  /* get all DOM rows (product_card + cart_details) that share the same key */
+  function rowsForKey(key) {
+    return document.querySelectorAll('[data-item-key="' + key + '"]');
+  }
+
+  /* refresh the summary prices after a cart change */
+  function refreshSummary(cart) {
+    var subtotal = document.getElementById('cart-subtotal');
+    var total    = document.getElementById('cart-total');
+    if (subtotal) subtotal.textContent = formatMoney(cart.total_price);
+    if (total)    total.textContent    = formatMoney(cart.total_price);
+
+    /* if cart is now empty, reload so the empty-cart message shows */
+    if (cart.item_count === 0) {
+      window.location.reload();
+    }
+  }
+
+  /* ── Remove button (✕ in product_card) ───────────────── */
+  document.querySelectorAll('.cart-remove').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var key = keyFromBtn(this);
+      if (!key) return;
+
+      /* optimistic UI – fade out both rows */
+      rowsForKey(key).forEach(function(el) {
+        el.style.transition = 'opacity .3s';
+        el.style.opacity = '0';
+      });
+
+      updateCart(key, 0).then(function(cart) {
+        /* remove DOM nodes after fade */
+        setTimeout(function() {
+          rowsForKey(key).forEach(function(el) { el.remove(); });
+        }, 300);
+        refreshSummary(cart);
+      });
+    });
+  });
+
+  /* ── Quantity buttons (+ / −) in cart_details ─────────── */
+  document.querySelectorAll('.qty-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var action = this.getAttribute('data-action');
+      var key    = keyFromBtn(this);
+      if (!key) return;
+
+      /* read current qty from the span between the two buttons */
+      var qtyContainer = this.closest('[class*="bg-"]');
+      var qtySpan = qtyContainer ? qtyContainer.querySelector('span') : null;
+      if (!qtySpan) return;
+
+      var current = parseInt(qtySpan.textContent.trim(), 10) || 1;
+      var next    = action === 'increase' ? current + 1 : current - 1;
+
+      if (next < 1) {
+        /* treat decrease below 1 as remove */
+        var removeBtn = document.querySelector('.cart-item-row[data-item-key="' + key + '"] .cart-remove');
+        if (removeBtn) removeBtn.click();
+        return;
+      }
+
+      /* disable buttons while updating */
+      var parentRow = this.closest('[data-item-key]');
+      parentRow.querySelectorAll('.qty-btn').forEach(function(b) { b.disabled = true; });
+
+      /* optimistic UI – update qty immediately */
+      qtySpan.textContent = next;
+
+      updateCart(key, next).then(function(cart) {
+        /* find the updated item in the response */
+        var updated = cart.items.find(function(i) { return i.key === key; });
+        if (updated) {
+          /* confirm qty from server */
+          qtySpan.textContent = updated.quantity;
+
+          /* update line total (desktop) */
+          var detailRow = document.querySelector('.cart-detail-row[data-item-key="' + key + '"]');
+          if (detailRow) {
+            var lineTotal = detailRow.querySelector('.line-total');
+            if (lineTotal) lineTotal.textContent = formatMoney(updated.final_line_price);
+
+            /* update mobile price */
+            var mobilePrices = detailRow.querySelectorAll('p');
+            mobilePrices.forEach(function(p) {
+              if (p.classList.contains('md:hidden')) {
+                p.textContent = formatMoney(updated.final_line_price);
+              }
+            });
+          }
+        }
+
+        refreshSummary(cart);
+
+        /* re-enable buttons */
+        parentRow.querySelectorAll('.qty-btn').forEach(function(b) { b.disabled = false; });
+      }).catch(function() {
+        /* revert on error */
+        qtySpan.textContent = current;
+        parentRow.querySelectorAll('.qty-btn').forEach(function(b) { b.disabled = false; });
+      });
+    });
+  });
+
+});
+</script>

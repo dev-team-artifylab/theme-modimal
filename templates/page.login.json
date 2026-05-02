@@ -10,19 +10,11 @@
 {
   "sections": {
     "main": {
-      "type": "page",
-      "settings": {}
-    },
-    "custom_login_page_PwxrCJ": {
       "type": "custom-login-page",
-      "name": "Custom Login",
-      "settings": {
-        "image": "shopify://shop_images/Frame_26086866.png"
-      }
+      "settings": {}
     }
   },
   "order": [
-    "main",
-    "custom_login_page_PwxrCJ"
+    "main"
   ]
 }

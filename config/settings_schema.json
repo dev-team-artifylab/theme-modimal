@@ -79,5 +79,38 @@
         "default": 4
       }
     ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Social Links"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram",
+        "placeholder": "https://instagram.com/your-brand"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook",
+        "placeholder": "https://facebook.com/your-brand"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "Pinterest",
+        "placeholder": "https://pinterest.com/your-brand"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok",
+        "placeholder": "https://tiktok.com/@your-brand"
+      }
+    ]
   }
 ]
