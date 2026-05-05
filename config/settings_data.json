@@ -12,21 +12,21 @@
     "type_primary_font": "montserrat_n4",
     "content_for_index": [],
     "blocks": {
-      "3746619903770602455": {
-        "type": "shopify://apps/wishlistsuite/blocks/wishlist-header-icon/c2905ea4-a4c7-46db-b02a-fc294afa02e5",
-        "disabled": false,
+      "6129977475812166837": {
+        "type": "shopify://apps/wishlistsuite/blocks/wishlist_embed/c2905ea4-a4c7-46db-b02a-fc294afa02e5",
+        "disabled": true,
         "settings": {
-          "custom_cart_icon_selector": "",
+          "custom_card_selector": "",
+          "custom_cart_item_selector": "",
           "customcss": "",
           "customjs": ""
         }
       },
-      "6129977475812166837": {
-        "type": "shopify://apps/wishlistsuite/blocks/wishlist_embed/c2905ea4-a4c7-46db-b02a-fc294afa02e5",
-        "disabled": false,
+      "3746619903770602455": {
+        "type": "shopify://apps/wishlistsuite/blocks/wishlist-header-icon/c2905ea4-a4c7-46db-b02a-fc294afa02e5",
+        "disabled": true,
         "settings": {
-          "custom_card_selector": "",
-          "custom_cart_item_selector": "",
+          "custom_cart_icon_selector": "",
           "customcss": "",
           "customjs": ""
         }
