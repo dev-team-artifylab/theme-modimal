@@ -1,0 +1,73 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "featured_area": {
+      "type": "modiweek-page-manager",
+      "settings": {}
+    },
+    "slider_area": {
+      "type": "modiweek",
+      "blocks": {
+        "collection_block_hpmdwT": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "sunday"
+          }
+        },
+        "collection_block_PakiDX": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "saturday"
+          }
+        },
+        "collection_block_NiFbnd": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "sunday"
+          }
+        },
+        "collection_block_A7VaFD": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "saturday"
+          }
+        },
+        "collection_block_iciGnM": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "saturday"
+          }
+        },
+        "collection_block_BUaEJT": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "sunday"
+          }
+        }
+      },
+      "block_order": [
+        "collection_block_hpmdwT",
+        "collection_block_PakiDX",
+        "collection_block_NiFbnd",
+        "collection_block_A7VaFD",
+        "collection_block_iciGnM",
+        "collection_block_BUaEJT"
+      ],
+      "settings": {
+        "heading": "Our Collections"
+      }
+    }
+  },
+  "order": [
+    "featured_area",
+    "slider_area"
+  ]
+}

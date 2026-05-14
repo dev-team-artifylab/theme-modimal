@@ -1,0 +1,36 @@
+<section class="w-full">
+
+  {% if section.settings.banner_image != blank %}
+    
+    <div class="w-full h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden">
+
+      <img 
+        src="{{ section.settings.banner_image | image_url: width: 2000 }}"
+        alt="Collection Banner"
+        class="w-full h-full object-cover"
+        loading="lazy"
+      >
+
+    </div>
+
+  {% endif %}
+
+</section>
+
+{% schema %}
+{
+  "name": "Collection Banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Upload Banner Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Banner"
+    }
+  ]
+}
+{% endschema %}

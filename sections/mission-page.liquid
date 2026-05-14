@@ -1,0 +1,267 @@
+<section class="mission-page">
+  <!-- Hero Section -->
+  <section class="relative">
+    {% if section.settings.hero_image != blank %}
+      <img
+        src="{{ section.settings.hero_image | image_url: width: 2000 }}"
+        alt="{{ section.settings.hero_heading | escape }}"
+        class="w-full h-[250px] md:h-[450px] object-cover"
+        width="{{ section.settings.hero_image.width }}"
+        height="{{ section.settings.hero_image.height }}"
+      >
+    {% endif %}
+
+    <div class="absolute inset-0 bg-black/20"></div>
+
+    <div class="absolute inset-0 flex items-end justify-center pb-8 md:pb-16 px-4 text-center">
+      <div>
+        {% if section.settings.hero_heading != blank %}
+          <h1 class="text-white text-2xl md:text-5xl font-bold mb-2">
+            {{ section.settings.hero_heading }}
+          </h1>
+        {% endif %}
+
+        {% if section.settings.hero_subheading != blank %}
+          <p class="text-white text-sm md:text-lg max-w-3xl mx-auto">
+            {{ section.settings.hero_subheading }}
+          </p>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Intro Section -->
+  <section class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-12 md:py-16">
+    {% if section.settings.intro_title != blank %}
+      <h2 class="text-2xl md:text-4xl font-semibold mb-4 text-[#2F3A2F]">
+        {{ section.settings.intro_title }}
+      </h2>
+    {% endif %}
+
+    {% if section.settings.intro_description != blank %}
+      <div class="text-gray-700 leading-8 max-w-4xl">
+        {{ section.settings.intro_description }}
+      </div>
+    {% endif %}
+  </section>
+
+  <!-- Values Section -->
+  <section class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 pb-16">
+    {% if section.settings.values_heading != blank %}
+      <h2 class="text-xl md:text-3xl font-semibold mb-8 text-[#2F3A2F]">
+        {{ section.settings.values_heading }}
+      </h2>
+    {% endif %}
+
+    {% assign value_blocks = section.blocks | where: 'type', 'value_card' %}
+
+    {% if value_blocks.size > 0 %}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+        {% for block in value_blocks %}
+          <div class="p-6 bg-white" {{ block.shopify_attributes }}>
+            {% if block.settings.title != blank %}
+              <h3 class="text-lg md:text-xl font-semibold mb-3 text-[#2F3A2F]">
+                {{ block.settings.title }}
+              </h3>
+            {% endif %}
+
+            {% if block.settings.description != blank %}
+              <div class="text-gray-600 leading-7 text-sm md:text-base">
+                {{ block.settings.description }}
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </section>
+
+  <!-- Image Gallery Section -->
+  <section class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 pb-16 md:pb-24">
+    {% if section.settings.gallery_heading != blank %}
+      <h2 class="text-xl md:text-3xl font-semibold mb-8 text-[#2F3A2F]">
+        {{ section.settings.gallery_heading }}
+      </h2>
+    {% endif %}
+
+    {% assign gallery_blocks = section.blocks | where: 'type', 'gallery_item' %}
+
+    {% if gallery_blocks.size > 0 %}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {% for block in gallery_blocks %}
+          <div {{ block.shopify_attributes }}>
+            {% if block.settings.image != blank %}
+              <img
+                src="{{ block.settings.image | image_url: width: 1200 }}"
+                alt="{{ block.settings.title | escape }}"
+                class="w-full h-auto object-cover"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+              >
+            {% endif %}
+
+            {% if block.settings.title != blank %}
+              <div class="mt-3 bg-[#5A6D57] text-white text-center py-2 px-4 text-sm font-medium">
+                {{ block.settings.title }}
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </section>
+  <!-- People Beyond Us Section -->
+  <section class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 pb-16 md:pb-24">
+    {% if section.settings.people_heading != blank %}
+      <h2 class="text-2xl md:text-3xl font-semibold mb-6 text-[#2F3A2F]">
+        {{ section.settings.people_heading }}
+      </h2>
+    {% endif %}
+
+    <!-- Fixed Width Container -->
+    <div class="max-w-[1224px] mx-auto">
+      {% if section.settings.people_image != blank %}
+        <img
+          src="{{ section.settings.people_image | image_url: width: 2000 }}"
+          alt="{{ section.settings.people_heading | escape }}"
+          class="w-full h-[420px] md:h-[450px] lg:h-[480px] object-cover"
+          width="{{ section.settings.people_image.width }}"
+          height="{{ section.settings.people_image.height }}"
+        >
+      {% endif %}
+
+      {% if section.settings.people_label != blank %}
+        <div class="flex justify-center mt-4">
+          <div
+            class="w-full max-w-[600px] h-[48px] bg-[#5A6D57] text-white text-sm font-medium flex items-center justify-center"
+          >
+            {{ section.settings.people_label }}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if section.settings.people_description != blank %}
+      <div class="mt-6 text-gray-600 leading-8 text-sm md:text-base max-w-5xl mx-auto">
+        {{ section.settings.people_description }}
+      </div>
+    {% endif %}
+  </section>
+</section>
+
+{% schema %}
+{
+  "name": "Mission Page",
+  "tag": "section",
+  "class": "section-mission-page",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Image"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Hero Heading",
+      "default": "Elegance In Simplicity, Earth's Harmony"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subheading",
+      "label": "Hero Subheading",
+      "default": "Our commitment to sustainability and timeless design."
+    },
+    {
+      "type": "text",
+      "id": "intro_title",
+      "label": "Intro Title",
+      "default": "Sustainability At Modimal"
+    },
+    {
+      "type": "richtext",
+      "id": "intro_description",
+      "label": "Intro Description",
+      "default": "<p>At Modimal, sustainability is at the heart of everything we do.</p>"
+    },
+    {
+      "type": "text",
+      "id": "values_heading",
+      "label": "Values Section Heading",
+      "default": "Our Mission, The Modimal Six"
+    },
+    {
+      "type": "text",
+      "id": "gallery_heading",
+      "label": "Gallery Heading",
+      "default": "Our Process"
+    },
+    {
+      "type": "text",
+      "id": "people_heading",
+      "label": "People Section Heading",
+      "default": "People Beyond Us"
+    },
+    {
+      "type": "image_picker",
+      "id": "people_image",
+      "label": "People Section Image"
+    },
+    {
+      "type": "text",
+      "id": "people_label",
+      "label": "People Section Label",
+      "default": "Our Suppliers"
+    },
+    {
+      "type": "richtext",
+      "id": "people_description",
+      "label": "People Section Description",
+      "default": "<p>With Modimal, you're not just wearing fashion; you're supporting a more responsible and sustainable future.</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "value_card",
+      "name": "Value Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Card Title",
+          "default": "Minimalism"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Card Description",
+          "default": "<p>Thoughtful design that encourages conscious consumption.</p>"
+        }
+      ]
+    },
+    {
+      "type": "gallery_item",
+      "name": "Gallery Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Image Title",
+          "default": "Processing"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 20,
+  "presets": [
+    {
+      "name": "Mission Page"
+    }
+  ]
+}
+{% endschema %}
