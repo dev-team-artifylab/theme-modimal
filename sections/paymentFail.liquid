@@ -1,0 +1,18 @@
+<section class="w-full h-screen flex items-center justify-center flex-col gap-[24px]">
+
+    <img src="{{ 'error.png' | asset_url }}" alt="">
+    <p class="text-h2 font-blod text-[#C30000]">Sorry, Payment failed</p>
+    
+    <div class="flex flex-col items-center">
+        <p>Unfortunately, your order Cannot Be Completed.</p>
+        <p>Please ensure that the billing address you provided is the same one where your debit/credit card is registered</p>
+        <p>Alternatively, please try a different payment method.</p>
+    </div>
+
+    <button class=" text-body-sm w-[392px] h-[40px] flex items-center justify-center bg-[#5A6D57] text-white">Pay Now</button>
+
+    <button href="/home" class="flex items-center gap-[16px] cursor-pointer text-body-sm">
+        <img class="w-[24px] h-[24px]" src="{{ 'left.png' | asset_url }}" alt=""> Back to My Orders
+    </button>
+
+</section>

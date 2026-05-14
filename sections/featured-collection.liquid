@@ -1,0 +1,85 @@
+<section class="collection-section py-8 px-2 md:px-6 lg:px-8">
+  {%- comment -%} Header {%- endcomment -%}
+  <div class="flex justify-between items-center py-4">
+    <h3 class="text-l md:text-xl lg:text-2xl font-semibold leading-[140%]">{{ section.settings.title | default: 'Collection' }}</h3>
+    <a href="{{ routes.collections_url }}" class="text-xs md:text-sm underline underline-offset-4 uppercase tracking-widest">
+      {{ section.settings.view_all_label | default: 'View All' }}
+    </a>
+  </div>
+
+  <div class="flex flex-col md:flex-row gap-2 lg:gap-3">
+    
+    {%- comment -%} Left Column {%- endcomment -%}
+    <div class="flex flex-col w-full md:w-1/2 gap-4 md:gap-14">
+      {% render 'collection-item', 
+         collection_handle: section.settings.collection_1, 
+         aspect_ratio: 'aspect-[6/5.2]' 
+      %}
+      {% render 'collection-item', 
+         collection_handle: section.settings.collection_2, 
+         aspect_ratio: 'aspect-[6/8.4]' 
+      %}
+    </div>
+
+    {%- comment -%} Right Column {%- endcomment -%}
+    <div class="flex flex-col w-full md:w-1/2 gap-4 md:gap-24 lg:gap-28 mt-0 md:mt-12">
+      {% render 'collection-item', 
+         collection_handle: section.settings.collection_3, 
+         aspect_ratio: 'aspect-[6/8.4]' 
+      %}
+      {% render 'collection-item', 
+         collection_handle: section.settings.collection_4, 
+         aspect_ratio: 'aspect-[6/4.6]' 
+      %}
+    </div>
+
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Featured Collections",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Heading",
+      "default": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "View All Label",
+      "default": "View All"
+    },
+    {
+      "type": "header",
+      "content": "Collections Layout"
+    },
+    {
+      "type": "collection",
+      "id": "collection_1",
+      "label": "First Collection (Left Top)"
+    },
+    {
+      "type": "collection",
+      "id": "collection_2",
+      "label": "Second Collection (Left Bottom)"
+    },
+    {
+      "type": "collection",
+      "id": "collection_3",
+      "label": "Third Collection (Right Top)"
+    },
+    {
+      "type": "collection",
+      "id": "collection_4",
+      "label": "Fourth Collection (Right Bottom)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collections"
+    }
+  ]
+}
+{% endschema %}
