@@ -1,20 +1,25 @@
-<section class="w-full">
 
-
-    <div class="h-[150px] flex items-center">
+{% if cart.item_count > 0 %}
+<div class="h-[150px] flex items-center">
       <a href="{{ routes.root_url }}" class="block">
         <img src="{{'Logo.png' | asset_url}}" alt="logo" class="h-auto max-w-[120px] md:max-w-[184px] object-contain">
       </a>
     </div>
-
- <!-- Header Section -->
-  <div class="flex w-full px-4 items-center justify-between font-montserrat">
-    <div class="flex gap-[24px]">
+<!-- Header Section -->
+  <div class="flex px-4 items-center justify-between font-montserrat">
+    <div id="header-mobile" class="flex gap-[24px]">
       <button id="back-btn" class="text-body-sm text-gray-500 cursor-pointer ">Back</button>
       <h3 class="text-h3 font-semibold md:text-h5">Your Cart</h3>
     </div>
-    <button id="continue-shopping" class="text-body-sm text-gray-500 cursor-pointer">Continue Shopping</button>
+    <button id="continue-shopping" class="text-body-sm text-gray-500 cursor-pointer md:block hidden">Continue Shopping</button>
+
   </div>
+   <p id="order-summary-mobile" class="w-1/2 text-body-lg p-4">
+        order summary
+    </p>
+{% endif %}
+
+<section id="cart-desktop" class="w-full hidden md:block">
 
 
   {% if cart.item_count > 0 %}
@@ -124,18 +129,195 @@
 
 </section>
 
+{% if cart.items.size > 0 %}
+  <section id="cart-mobile" class="w-full h-auto lg:hidden">
+    
+     
+      {% for item in cart.items %}
+      <div class="w-full flex gap-3.5 py-4 border-b border-gray-100 items-start">
+
+        <!-- IMAGE -->
+        <div class="relative flex-shrink-0">
+          <img 
+            src="{{ item.image | image_url: width: 200 }}" 
+            alt="{{ item.title | escape }}"
+            class="w-[100px] h-[130px] object-cover"
+          >
+          <span class="absolute top-1.5 right-1.5 bg-[#FFFFFF] text-black text-[10px] w-[24px] h-[24px] flex items-center justify-center font-medium">
+            {{ item.quantity }}
+          </span>
+        </div>
+
+        <!-- INFO -->
+        <div class="flex-1 flex flex-col justify-between" style="min-height: 130px;">
+          <div class="flex flex-col gap-2">
+            <h2 class="text-[13px] font-semibold text-gray-900 mb-1">{{ item.product.title }}</h2>
+            {% unless item.variant.title == 'Default Title' %}
+              {% assign variant_parts = item.variant.title | split: ' / ' %}
+              {% for part in variant_parts %}
+                <p class="text-[11px] text-gray-400 leading-snug">
+                  {% if forloop.index == 2 %}Size: {{ part }}
+                  {% elsif forloop.index == 1 %}Color: {{ part }}
+                  {% endif %}
+                </p>
+              {% endfor %}
+            {% endunless %}
+          </div>
+
+          <!-- QTY + PRICE -->
+          <div class="w-full flex items-center justify-between gap-8">
+            <p class="text-[13px] font-medium text-gray-900">
+              {{ item.line_price | money }}
+            </p>
+            <div class="bg-[#D1D9CF] flex items-center">
+              <button 
+                type="button" 
+                class="w-7 h-7 flex items-center justify-center text-sm text-gray-700 hover:bg-black/5 transition-colors"
+                data-action="decrease"
+                data-key="{{ item.key }}"
+                data-qty="{{ item.quantity }}"
+              >−</button>
+              <span class="text-[13px] font-medium text-gray-800 min-w-[20px] text-center">
+                {{ item.quantity }}
+              </span>
+              <button 
+                type="button"
+                class="w-7 h-7 flex items-center justify-center text-sm text-gray-700 hover:bg-black/5 transition-colors"
+                data-action="increase"
+                data-key="{{ item.key }}"
+                data-qty="{{ item.quantity }}"
+              >+</button>
+            </div>
+            
+          </div>
+        </div>
+
+        <!-- REMOVE -->
+        <button 
+          type="button"
+          class="w-[36px] h-[36px] flex items-center justify-center font-bold hover:text-gray-600 text-lg leading-none flex-shrink-0 mt-0.5 transition-colors"
+          data-action="remove"
+          data-key="{{ item.key }}"
+        >x</button>
+
+      </div>
+      {% endfor %}
+
+  <div id="summary" class="flex flex-col gap-6 pt-8 pb-8">
+        <div id="cart-summary" class="text-body-sm flex flex-col gap-3 text-body-lg">
+
+          <div class="text-body-sm flex justify-between">
+              <p>Subtotal</p>
+              <p id="cart-subtotal">{{ cart.total_price | money }}</p>
+          </div>
+
+          <div class="text-body-sm flex justify-between text-gray-600">
+              <p>Tax</p>
+              <p id="cart-tax">
+                {% if cart.tax_price > 0 %}
+                  {{ cart.tax_price | money }}
+                {% else %}
+                  Tk 50
+                {% endif %}
+              </p>
+           </div>
+
+          <div class="text-body-sm flex justify-between text-gray-600">
+              <p>Shipping</p>
+              <p class="font-medium">
+                {% if cart.shipping_price > 0 %}
+          {{ cart.shipping_price | money }}
+        {% else %}
+          Free
+        {% endif %}
+      </p>
+    </div>
+
+    <!-- Total -->
+    <div class="text-body-sm flex justify-between text-body-lg">
+      <p>Total Orders:</p>
+      <p id="cart-total">{{ cart.total_price | money }}</p>
+    </div>
+
+  </div>
+
+  <!-- Info Text -->
+  <p class="text-[10px] font-semibold leading-relaxed">
+    The total amount you pay includes all applicable customs duties & taxes.
+    We guarantee no additional charges on delivery.
+  </p>
+
+  <!-- Button -->
+    <button class="w-full h-[40px] flex items-center justify-end">
+      <a href="/checkout" class="w-[184px] h-full flex items-center justify-center bg-[#5A6D57] text-white">Next</a>
+    </button>
+
+  </div>
+
+
+
+  
+</section>
+
+{% else %}
+
+<!-- empty cart -->
+      <div class="flex flex-row justify-center items-center">
+
+        <h3> Your cart is empty</h3>
+        <p>Start filling it up with your favorites.</p>
+        <button><a href="{{ routes.root_url }}">Shop Now</a></button>
+
+      </div>
+
+
+{% endif %}
+
+
+<style>
+    
+    @media (max-width:768px) {
+        
+        #continue-shopping {
+            display: none;
+        }
+
+        #header-mobile {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;  
+          width: 75%;
+        }
+        
+    }
+
+    @media (min-width:768px) {
+        #order-summary-mobile {
+          display: none;
+        }
+    }
+
+</style>
+
+
+
+
 <script>
 
     const backBtn = document.getElementById('back-btn');
     const continueShopping = document.getElementById('continue-shopping');
 
-    backBtn.addEventListener('click', function() {
+    if (backBtn) {
+      backBtn.addEventListener('click', function() {
         window.history.back();
-    });
+      });
+    }
 
-    continueShopping.addEventListener('click', function() {
+    if (continueShopping) {
+      continueShopping.addEventListener('click', function() {
         window.location.href = "/checkout";
-    });
+      });
+    }
 
 
 
