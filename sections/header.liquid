@@ -1,5 +1,5 @@
 <header class="site-header bg-gray-100 full-width h-auto lg:min-h-[80px] relative z-40">
-  <div class="header-container flex items-center justify-between md:justify-evenly px-2 lg:px-4 py-2 md:py-3 lg:py-5">
+  <div class="header-container flex items-center justify-between md:justify-evenly px-2 lg:px-4 py-2 md:py-3 lg:py-4">
     <div class="">
       <a href="{{ routes.root_url }}" class="block">
         {% if section.settings.logo != blank %}
@@ -98,28 +98,23 @@
       </a>
 
       <!-- Profile -->
-{% if customer %}
-  <a href="{{ routes.account_url }}" class="icon-account hidden md:block" aria-label="Account">
-{% else %}
-  {% comment %} 
-    Ensure '/pages/login' matches the URL handle of the page 
-    you created with the 'page.login.json' template.
-  {% endcomment %}
-  <a href="/pages/login" class="icon-account hidden md:block" aria-label="Account">
-{% endif %}
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="w-5 h-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      stroke-width="1.8"
-    >
-      <circle cx="12" cy="8" r="4"></circle>
-      <path d="M4 20C4 16.7 7.1 14 12 14C16.9 14 20 16.7 20 20"></path>
-    </svg>
-  </a>
-
+      {% if customer %}
+        <a href="{{ routes.account_url }}" class="icon-account hidden md:block" aria-label="Account">
+      {% else %}
+        <a href="/pages/login" class="icon-account hidden md:block" aria-label="Account">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 20C4 16.7 7.1 14 12 14C16.9 14 20 16.7 20 20"></path>
+          </svg>
+        </a>
+      {% endif %}
       <!-- Wishlist -->
       <a href="/pages/wishlist" class="icon-wishlist hidden md:block" aria-label="Wishlist">
         <svg
@@ -147,7 +142,10 @@
           <circle cx="9" cy="19" r="1.5"></circle>
           <circle cx="17" cy="19" r="1.5"></circle>
         </svg>
-        <span id="desktop-cart-count" class="absolute -top-2 -right-2 bg-[#5A6D57] text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full {% if cart.item_count == 0 %}hidden{% endif %}">
+        <span
+          id="desktop-cart-count"
+          class="absolute -top-2 -right-2 bg-[#5A6D57] text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full {% if cart.item_count == 0 %}hidden{% endif %}"
+        >
           {{ cart.item_count }}
         </span>
       </button>
@@ -263,7 +261,7 @@
     const cartToggle = document.getElementById('cart-toggle');
     const cartDrawer = document.getElementById('cart-drawer');
 
-    window.toggleCartDrawer = function(isOpen) {
+    window.toggleCartDrawer = function (isOpen) {
       if (!cartDrawer) return;
       if (isOpen) {
         cartDrawer.classList.remove('translate-x-full');
@@ -308,7 +306,7 @@
     // Unified overlay click listener for Nav Drawer and Cart Drawer
     if (overlay) {
       overlay.addEventListener('click', () => {
-        toggleDrawer(false);            // Close Nav Drawer
+        toggleDrawer(false); // Close Nav Drawer
         window.toggleCartDrawer(false); // Close Cart Drawer
       });
     }
@@ -336,7 +334,6 @@
         }
       }
     });
-
   });
 </script>
 {% schema %}
@@ -352,6 +349,26 @@
       "type": "link_list",
       "id": "menu",
       "label": "Select Menu"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "mega_menu_collections",
+      "name": "Mega Menu Collections",
+      "settings": [
+        {
+          "type": "text",
+          "id": "menu_item_name",
+          "label": "Menu Item Name",
+          "info": "Enter the name of the menu item for which you want to display collections (e.g., Collection or New In)."
+        },
+        {
+          "type": "collection_list",
+          "id": "collections",
+          "label": "Select Collections",
+          "limit": 3
+        }
+      ]
     }
   ]
 }

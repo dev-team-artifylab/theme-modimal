@@ -1,8 +1,8 @@
-<section class="grid grid-cols-1 gap-4">
+<section id="main" class="grid grid-cols-1 gap-4">
 
-  <div class="text-[18px] p-6 flex gap-2">
+  <div id="breadcrumb" class="text-[18px] p-6 flex items-center justify-between gap-2">
     <div>
-      <a href="/">Home</a>
+      <a href="{{ routes.root_url }}">Home</a>
     <span class="text-[#B0B0B0]">/</span>
 
     <a href="{{ product.collections.first.url }}">{{ product.collections.first.title }}</a>
@@ -14,10 +14,10 @@
     </div>
   </div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:p-4">
 
   <!-- ===== Images Column ===== -->
-  <div class="images h-[512px] w-full flex gap-6 p-2">
+  <div class="images h-[512px] w-full flex gap-6 md:p-2">
 
     <!-- Thumbnails -->
     <div class="img_box h-full max-h-[500px] overflow-y-auto flex flex-col gap-4 hidden md:flex">
@@ -35,7 +35,7 @@
     {% if product.featured_image %}
       <img 
         id="mainImage"
-        class="w-full h-full object-cover"
+        class="w-full h-full object-cover md:max-w-full"
         src="{{ product.featured_image | image_url: width: 800 }}" 
         alt="{{ product.featured_image.alt | escape }}"
       >
@@ -46,17 +46,22 @@
   </div>
 
   <!-- ===== Description Column ===== -->
-  <div class="description flex flex-col gap-[24px] p-2">
+  <div class="description flex flex-col gap-[16px] p-4 md:p-2">
       <h3 class="text-[32px] font-bold">{{ product.title }}</h3>
 
       <p id="product-desc" class="text-gray-600">
-          {% if product.description.size > 200 %}
-            <span id="desc-short">{{ product.description | truncate: 200 }}</span>
-            <button class="text-primary text-[18px] ml-1">Read More</button>
-          {% else %}
-            {{ product.description }}
-          {% endif %}
-      </p>
+  {% if product.description.size > 200 %}
+    <span id="desc-short">{{ product.description }}</span>
+
+    <span id="desc-full" class="hidden">
+      {{ product.description }}
+    </span>
+
+   
+  {% else %}
+    {{ product.description }}
+  {% endif %}
+</p>
 
       <!-- Option Section -->
           {% form 'product', product, class: 'product-form flex flex-col gap-6' %}
@@ -172,10 +177,10 @@
 
 {% comment %} FAQ SECTION {% endcomment %}
 
-<div class="w-full mx-auto p-6 flex gap-6">
+<div id="faq_section" class="w-full mx-auto p-6 flex gap-6">
 
   <!-- LEFT SIDE -->
-  <div class="w-1/2 bg-[#F0F2EF] border border-gray-300">
+  <div id="left-side" class="w-1/2 bg-[#F0F2EF] border border-gray-300">
 
     <!-- ITEM -->
     <div class="border-b border-gray-300 accordion-item">
@@ -191,15 +196,11 @@
     <!-- ITEM -->
     <div class="border-b border-gray-300 accordion-item">
       <div class="flex justify-between items-center p-4 cursor-pointer header">
-        <p class="font-semibold">Fabric & Care</p>
-        <span class="text-xl icon">−</span>
+        <p class="font-semibold">Fabric & care </p>
+        <span class="text-xl icon">+</span>
       </div>
-      <div class="content px-4 pb-4 text-sm text-gray-600">
-        <p><strong>Fabric:</strong></p>
-        <p>Tailored Stretch, Made in Italy</p>
-
-        <p class="mt-2"><strong>Care:</strong></p>
-        <p>Cold machine wash, line dry</p>
+      <div class="content hidden px-4 pb-4 text-sm text-gray-600">
+        Fabric : <br>Tailored Stretch,<br> Made in Italy62% Nylon, 38% Elastane, 100% vegan materials <br> Care: <br> Cold machine wash, line dry <br> Do not tumble dry or dry clean, Do not use bleach or fabric <br> softener
       </div>
     </div>
 
@@ -215,22 +216,23 @@
     </div>
 
     <!-- ITEM -->
-    <div class="accordion-item">
+    <div class="border-b border-gray-300 accordion-item">
       <div class="flex justify-between items-center p-4 cursor-pointer header">
-        <p class="font-semibold ">Shipping And Return</p>
-        <span class="text-xl icon">−</span>
+        <p class="font-semibold">Shipping And Return</p>
+        <span class="text-xl icon">+</span>
       </div>
-      <div class="content px-4 pb-4 text-sm text-gray-600">
-        <p>Shipping:<br>is free on US , Canada orders are $175 <br>
-        Returns: <br> Unwashed, unworn items are eligible for returns or exchanges within 30 days of purchase. Final Sale items are not eligible for returns or exchanges.</p>
-       
+      <div class="content hidden px-4 pb-4 text-sm text-gray-600">
+        Shipping: <br>
+        is free on US , Canada orders are $175 <br>
+        Returns: <br>
+        Unwashed, unworn items are eligible for returns or exchanges <br> within 30 days of purchase. Final Sale items are not eligible for <br> returns or exchanges.
       </div>
     </div>
 
   </div>
 
   <!-- RIGHT SIDE -->
-  <div class="w-1/2 bg-[#F0F2EF] border border-gray-300 p-4 flex flex-col gap-[24px]">
+  <div id="right-side" class="w-1/2 bg-[#F0F2EF] border border-gray-300 p-4 flex flex-col gap-[24px]">
     <h2 class="font-semibold text-lg mb-2 border-b border-gray-300 p-4">Silk</h2>
     <p class="text-sm text-gray-700">
       This material is our signature high-stretch fabric that drapes like silk.
@@ -249,8 +251,9 @@
 
 
 <!-- Related Products -->
-<h1 class="text-2xl font-bold mb-6">You may also like</h1>
-<div class="flex flex-wrap gap-6">
+<div class=" flex flex-col gap-[32px]">
+  <h1 class="text-2xl font-bold mb-6">You may also like</h1>
+<div id="related-products" class="flex flex-nowrap overflow-x-auto gap-6 md:flex-wrap pb-4">
   {% assign target_collection = section.settings.collection %}
   {% if target_collection == blank %}
     {% assign target_collection = product.collections.first %}
@@ -260,7 +263,7 @@
   {% for related_product in target_collection.products %}
     {% if related_product.handle != product.handle and shown_count < 4 %}
       {% assign shown_count = shown_count | plus: 1 %}
-      <div class="w-[320px] bg-white rounded-lg overflow-hidden shadow-md group">
+      <div id="product-card" class="flex-shrink-0 w-[260px] md:w-[320px] bg-white rounded-lg overflow-hidden shadow-md group">
 
         <!-- Image Section -->
         <div class="relative">
@@ -268,6 +271,7 @@
             <img 
               src="{{ related_product.featured_image | img_url: 'master' }}" 
               alt="{{ related_product.title | escape }}"
+              id="product-img"
               class="w-full h-[400px] object-cover"
             />
           </a>
@@ -306,6 +310,7 @@
     {% endif %}
   {% endfor %}
 </div>
+</div>
 
 </section>
 
@@ -322,6 +327,55 @@
   ]
 }
 {% endschema %}
+
+
+<style>
+
+  @media (max-width: 768px) {
+
+    #main{
+      width: 100%;
+      
+    }
+
+    #breadcrumb{
+      font-size: 12px;
+    }
+
+    #faq_section{
+      display: flex;
+      flex-direction: column-reverse;
+      width: 100%;
+    }
+    #left-side, #right-side{
+      width: 100%;
+    }
+
+
+    
+
+    #related-products{
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+
+    #product-card{
+      width: 152px;
+      height: 333px;
+    }
+
+    #product-img{
+      height: ;
+    }
+
+  }
+
+</style>
+
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const productForm = document.querySelector('.product-form');
@@ -580,4 +634,23 @@
     });
 
   });
+
+
+const readMoreBtn = document.getElementById('read-more');
+const descShort = document.getElementById('desc-short');
+const descFull = document.getElementById('desc-full');
+
+readMoreBtn.addEventListener('click', () => {
+  const isHidden = descFull.classList.contains('hidden');
+
+  if (isHidden) {
+    descShort.classList.add('hidden');
+    descFull.classList.remove('hidden');
+    readMoreBtn.textContent = 'Read Less';
+  } else {
+    descShort.classList.remove('hidden');
+    descFull.classList.add('hidden');
+    readMoreBtn.textContent = 'Read More';
+  }
+});
 </script>
