@@ -28,7 +28,7 @@
         "mega_menu_collections_4Mzewi": {
           "type": "mega_menu_collections",
           "settings": {
-            "menu_item_name": "",
+            "menu_item_name": "Collection",
             "collections": [
               "thursday"
             ]
