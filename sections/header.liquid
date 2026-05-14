@@ -1,5 +1,5 @@
 <header class="site-header bg-gray-100 full-width h-auto lg:min-h-[80px] relative z-40">
-  <div class="header-container flex items-center justify-between md:justify-evenly px-2 lg:px-4 py-2 md:py-3 lg:py-5">
+  <div class="header-container flex items-center justify-between md:justify-evenly px-2 lg:px-4 py-2 md:py-3 lg:py-3">
     <div class="">
       <a href="{{ routes.root_url }}" class="block">
         {% if section.settings.logo != blank %}
@@ -16,19 +16,105 @@
       </a>
     </div>
 
-    <nav role="navigation">
-      <ul class="hidden md:flex gap-8 list-none">
+    <nav role="navigation" class="static">
+      <ul class="hidden md:flex gap-8 list-none items-center justify-center">
         {% for link in section.settings.menu.links %}
-          <li>
+          {%- assign has_dropdown = false -%}
+          {%- if link.links.size > 0 -%}
+            {%- assign has_dropdown = true -%}
+          {%- endif -%}
+
+          <li class="group {% if has_dropdown %}static{% else %}relative{% endif %}">
             <a
               href="{{ link.url }}"
-              class="font-[family-name:var(--font-montserrat)] md:text-sm lg:text-lg font-medium text-[#404040] hover:text-[#5A6D57] transition-colors {% if link.active %}text-[#5A6D57] font-bold{% endif %}"
-              {% if link.current %}
-                aria-current="page"
-              {% endif %}
+              class="flex items-center gap-1 py-6 font-[family-name:var(--font-montserrat)] md:text-sm lg:text-base font-medium text-[#404040] hover:text-[#5A6D57] transition-colors {% if link.active %}text-[#5A6D57] font-bold{% endif %}"
             >
               {{ link.title }}
+              {% if has_dropdown %}
+                <svg
+                  class="w-3 h-3 transition-transform group-hover:rotate-180"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              {% endif %}
             </a>
+
+            {% if has_dropdown %}
+              <div class="absolute left-0 right-0 top-full hidden group-hover:block bg-white shadow-xl border-t border-gray-100 z-[100] w-full">
+                <div class="max-w-[1400px] mx-auto px-6 md:px-12 py-4">
+                  <div class="flex gap-8">
+                    {% for childlink in link.links %}
+                      <div class="mega-menu-column min-w-[100px]">
+                        {%- comment -%} Level 2 Heading {%- endcomment -%}
+                        <a
+                          href="{{ childlink.url }}"
+                          class="block font-bold text-sm uppercase tracking-wider text-black mb-4 hover:text-[#5A6D57]"
+                        >
+                          {{ childlink.title }}
+                        </a>
+
+                        {% if childlink.links.size > 0 %}
+                          <ul class="list-none p-0 flex flex-col gap-2">
+                            {% for grandchildlink in childlink.links %}
+                              <li>
+                                <a
+                                  href="{{ grandchildlink.url }}"
+                                  class="text-sm text-gray-500 hover:text-[#5A6D57] transition-colors"
+                                >
+                                  {{ grandchildlink.title }}
+                                </a>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        {% endif %}
+                      </div>
+                    {% endfor %}
+
+                    <div class="mega-menu-promo-container flex gap-6 overflow-hidden">
+                      {%- assign current_menu_title = link.title | downcase | strip -%}
+
+                      {%- for block in section.blocks -%}
+                        {%- assign target_title = block.settings.menu_item_name | downcase | strip -%}
+
+                        {%- if target_title == current_menu_title -%}
+                          {%- comment -%}
+                            অ্যাডমিনের সিলেক্ট করা কালেকশন লিস্ট লুপ হচ্ছে।
+                            নিশ্চিত করুন block.settings.collections এর ওপর এই লুপটি আছে।
+                          {%- endcomment -%}
+                          {%- for promo_collection in block.settings.collections limit: 3 -%}
+                            <div class="promo-card w-[220px] flex-shrink-0">
+                              <div class="relative w-full h-[280px] overflow-hidden border border-gray-100 group">
+                                <a href="{{ promo_collection.url }}">
+                                  {%- if promo_collection.featured_image != blank -%}
+                                    <img
+                                      src="{{ promo_collection.featured_image | image_url: width: 500 }}"
+                                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                      alt="{{ promo_collection.title }}"
+                                    >
+                                  {%- else -%}
+                                    {{ 'collection-1' | placeholder_svg_tag: 'w-full h-full object-cover bg-gray-50' }}
+                                  {%- endif -%}
+
+                                 
+                                </a>
+                              </div>
+                              <a
+                                href="{{ promo_collection.url }}"
+                                class="mt-2 inline-block text-sm"
+                                >{{ promo_collection.title }}</a
+                              >
+                            </div>
+                          {%- endfor -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
           </li>
         {% endfor %}
       </ul>
@@ -66,28 +152,23 @@
       </a>
 
       <!-- Profile -->
-{% if customer %}
-  <a href="{{ routes.account_url }}" class="icon-account hidden md:block" aria-label="Account">
-{% else %}
-  {% comment %} 
-    Ensure '/pages/login' matches the URL handle of the page 
-    you created with the 'page.login.json' template.
-  {% endcomment %}
-  <a href="/pages/login" class="icon-account hidden md:block" aria-label="Account">
-{% endif %}
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="w-5 h-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      stroke-width="1.8"
-    >
-      <circle cx="12" cy="8" r="4"></circle>
-      <path d="M4 20C4 16.7 7.1 14 12 14C16.9 14 20 16.7 20 20"></path>
-    </svg>
-  </a>
-
+      {% if customer %}
+        <a href="{{ routes.account_url }}" class="icon-account hidden md:block" aria-label="Account">
+      {% else %}
+        <a href="/pages/login" class="icon-account hidden md:block" aria-label="Account">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 20C4 16.7 7.1 14 12 14C16.9 14 20 16.7 20 20"></path>
+          </svg>
+        </a>
+      {% endif %}
       <!-- Wishlist -->
       <a href="/pages/wishlist" class="icon-wishlist hidden md:block" aria-label="Wishlist">
         <svg
@@ -115,7 +196,10 @@
           <circle cx="9" cy="19" r="1.5"></circle>
           <circle cx="17" cy="19" r="1.5"></circle>
         </svg>
-        <span id="desktop-cart-count" class="absolute -top-2 -right-2 bg-[#5A6D57] text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full {% if cart.item_count == 0 %}hidden{% endif %}">
+        <span
+          id="desktop-cart-count"
+          class="absolute -top-2 -right-2 bg-[#5A6D57] text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full {% if cart.item_count == 0 %}hidden{% endif %}"
+        >
           {{ cart.item_count }}
         </span>
       </button>
@@ -231,7 +315,7 @@
     const cartToggle = document.getElementById('cart-toggle');
     const cartDrawer = document.getElementById('cart-drawer');
 
-    window.toggleCartDrawer = function(isOpen) {
+    window.toggleCartDrawer = function (isOpen) {
       if (!cartDrawer) return;
       if (isOpen) {
         cartDrawer.classList.remove('translate-x-full');
@@ -276,7 +360,7 @@
     // Unified overlay click listener for Nav Drawer and Cart Drawer
     if (overlay) {
       overlay.addEventListener('click', () => {
-        toggleDrawer(false);            // Close Nav Drawer
+        toggleDrawer(false); // Close Nav Drawer
         window.toggleCartDrawer(false); // Close Cart Drawer
       });
     }
@@ -304,7 +388,6 @@
         }
       }
     });
-
   });
 </script>
 {% schema %}
@@ -320,6 +403,26 @@
       "type": "link_list",
       "id": "menu",
       "label": "Select Menu"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "mega_menu_collections",
+      "name": "Mega Menu Collections",
+      "settings": [
+        {
+          "type": "text",
+          "id": "menu_item_name",
+          "label": "Menu Item Name",
+          "info": "যে মেনু আইটেমের জন্য কালেকশন দেখাতে চান তার নাম লিখুন (যেমন: Collection বা New In)"
+        },
+        {
+          "type": "collection_list",
+          "id": "collections",
+          "label": "Select Collections",
+          "limit": 3
+        }
+      ]
     }
   ]
 }
