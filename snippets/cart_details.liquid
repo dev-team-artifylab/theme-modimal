@@ -1,0 +1,38 @@
+<div class="w-full flex items-center justify-between">
+  <!-- PRICE (desktop) -->
+<div class="hidden md:flex items-center justify-center">
+  <p class="text-body-sm text-gray-800">{{ item.original_price | money }}</p>
+</div>
+
+<!-- QUANTITY -->
+<div class="flex items-center md:justify-center">
+  <div class="h-[36px] w-[80px] bg-[#D1D9CF] flex items-center ">
+    <button
+      type="button"
+      class="qty-btn w-8 h-8 flex items-center justify-center text-body-sm text-gray-700 hover:bg-black/5 transition-colors cursor-pointer"
+      data-action="decrease"
+      data-line="{{ line_index }}"
+    >−</button>
+    <span id="qty-{{ line_index }}" class="text-body-sm font-medium text-gray-800 min-w-[24px] text-center select-none">
+      {{ item.quantity }}
+    </span>
+    <button
+      type="button"
+      class="qty-btn w-8 h-8 flex items-center justify-center text-body-sm cursor-pointer"
+      data-action="increase"
+      data-line="{{ line_index }}"
+    >+</button>
+  </div>
+
+  <!-- Mobile price -->
+  <p class="md:hidden ml-auto text-body-sm font-semibold text-gray-900">{{ item.final_line_price | money }}</p>
+</div>
+
+<!-- LINE TOTAL (desktop) -->
+<div class="hidden md:flex items-center justify-end">
+  <p class="line-total text-body-sm">{{ item.final_line_price | money }}</p>
+</div>
+
+
+
+</div>

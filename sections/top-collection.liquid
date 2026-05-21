@@ -1,0 +1,102 @@
+{% assign selected_collection = section.settings.collection %}
+
+<section class="full-width pl-6 md:pl-12 overflow-hidden py-8">
+  <div class="py-4">
+    <h3 class="text-lg md:text-xl font-medium uppercase tracking-wider">
+      {{ section.settings.heading | default: selected_collection.title }}
+    </h3>
+  </div>
+
+  <div class="relative group">
+    <div
+      class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory hide-scrollbar pr-12"
+      id="collection-slider-{{ section.id }}"
+    >
+      {% if selected_collection != blank and selected_collection.products.size > 0 %}
+        {% for product in selected_collection.products limit: section.settings.products_to_show %}
+          <div class="flex-shrink-0 snap-start w-[220px] md:w-[240px] xl:w-[288px]">
+            
+            <div class="relative w-full aspect-[3/4] overflow-hidden bg-[#f3f3f3] group/item">
+              <a href="{{ product.url }}" class="block w-full h-full">
+                {%- if product.featured_image -%}
+                  <img
+                    src="{{ product.featured_image | image_url: width: 800 }}"
+                    alt="{{ product.title | escape }}"
+                    loading="lazy"
+                    width="{{ product.featured_image.width }}"
+                    height="{{ product.featured_image.height }}"
+                    class="w-full h-full object-cover hover:scale-105 duration-500 transition-transform"
+                  >
+                {% else %}
+                  {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover opacity-50' }}
+                {% endif %}
+              </a>
+
+              <button 
+                type="button" 
+                class="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 backdrop-blur-sm shadow-sm hover:bg-white transition-all duration-300 group-hover/item:opacity-100 md:opacity-0"
+                aria-label="Add to wishlist"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 stroke-black fill-none hover:fill-red-500 hover:stroke-red-500 transition-colors" viewBox="0 0 24 24" stroke-width="1.5">
+                  <path d="M12 21s-7-4.35-9.5-8.28C.5 9.5 2.42 5.5 6.5 5.5c2.28 0 4.1 1.32 5.5 3.09C13.4 6.82 15.22 5.5 17.5 5.5c4.08 0 6 4 4 7.22C19 16.65 12 21 12 21z"></path>
+                </svg>
+              </button>
+            </div>
+
+            <div class="mt-4 py-4 flex flex-col gap-2">
+              <h4 class="text-sm md:text-base font-normal truncate tracking-tight uppercase">
+                {{ product.title }}
+              </h4>
+              <p class="text-sm text-gray-500 mt-1">{{ product.price | money }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+
+<style>
+  /* Hide scrollbar but allow scrolling */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Collection Slider",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Modimal"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Select Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 6,
+      "max": 20,
+      "step": 1,
+      "default": 12
+    }
+  ],
+  "presets": [
+    {
+      "name": "Modiweek Slider"
+    }
+  ]
+}
+{% endschema %}
