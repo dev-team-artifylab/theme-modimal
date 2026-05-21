@@ -23,7 +23,7 @@
       }
     },
     "header": {
-      "type": "header",
+      "type": "header-fix",
       "blocks": {
         "mega_menu_collections_4Mzewi": {
           "type": "mega_menu_collections",
