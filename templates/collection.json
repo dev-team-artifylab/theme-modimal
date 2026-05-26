@@ -11,7 +11,9 @@
   "sections": {
     "main": {
       "type": "collection",
-      "settings": {}
+      "settings": {
+        "banner_image_1": "shopify://shop_images/Frame_427319608.png"
+      }
     }
   },
   "order": [
