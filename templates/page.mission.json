@@ -1,8 +1,116 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
-      "type": "mission-page"
+      "type": "mission-page",
+      "blocks": {
+        "gallery_item_GXnLrc": {
+          "type": "gallery_item",
+          "settings": {
+            "image": "shopify://shop_images/Frame_427319449.png",
+            "title": "Processing"
+          }
+        },
+        "gallery_item_Ad93zK": {
+          "type": "gallery_item",
+          "settings": {
+            "image": "shopify://shop_images/Frame_427319449.png",
+            "title": "Processing"
+          }
+        },
+        "gallery_item_8jaf43": {
+          "type": "gallery_item",
+          "settings": {
+            "image": "shopify://shop_images/Frame_26086866.png",
+            "title": "Processing"
+          }
+        },
+        "gallery_item_C7j43T": {
+          "type": "gallery_item",
+          "settings": {
+            "image": "shopify://shop_images/Frame_427319449.png",
+            "title": "Processing"
+          }
+        },
+        "value_card_XK3gV3": {
+          "type": "value_card",
+          "settings": {
+            "title": "Minimalism",
+            "description": "<p>Thoughtful design that encourages conscious consumption.</p>"
+          }
+        },
+        "value_card_yqjbfE": {
+          "type": "value_card",
+          "settings": {
+            "title": "Minimalism",
+            "description": "<p>Thoughtful design that encourages conscious consumption.</p>"
+          }
+        },
+        "value_card_ADLHgt": {
+          "type": "value_card",
+          "settings": {
+            "title": "Minimalism",
+            "description": "<p>Thoughtful design that encourages conscious consumption.</p>"
+          }
+        },
+        "value_card_N9wnnA": {
+          "type": "value_card",
+          "settings": {
+            "title": "Minimalism",
+            "description": "<p>Thoughtful design that encourages conscious consumption.</p>"
+          }
+        },
+        "value_card_HNHpNF": {
+          "type": "value_card",
+          "settings": {
+            "title": "Minimalism",
+            "description": "<p>Thoughtful design that encourages conscious consumption.</p>"
+          }
+        },
+        "value_card_8B3BFG": {
+          "type": "value_card",
+          "settings": {
+            "title": "Minimalism",
+            "description": "<p>Thoughtful design that encourages conscious consumption.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "gallery_item_GXnLrc",
+        "gallery_item_Ad93zK",
+        "gallery_item_8jaf43",
+        "gallery_item_C7j43T",
+        "value_card_XK3gV3",
+        "value_card_yqjbfE",
+        "value_card_ADLHgt",
+        "value_card_N9wnnA",
+        "value_card_HNHpNF",
+        "value_card_8B3BFG"
+      ],
+      "settings": {
+        "hero_image": "shopify://shop_images/big_pic_sustainability.png",
+        "hero_heading": "",
+        "hero_subheading": "",
+        "intro_title": "Sustainability At Modimal",
+        "intro_description": "<p>At Modimal, sustainability is at the heart of everything we do.</p>",
+        "values_heading": "Our Mission, The Modimal Six",
+        "gallery_heading": "Our Process",
+        "people_heading": "People Beyond Us",
+        "people_image": "shopify://shop_images/Frame_427319608.png",
+        "people_label": "Our Suppliers",
+        "people_description": "<p>With Modimal, you're not just wearing fashion; you're supporting a more responsible and sustainable future.</p>"
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
