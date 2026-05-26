@@ -52,10 +52,18 @@
         "logo": "shopify://shop_images/Logo.png",
         "menu": "main-menu"
       }
+    },
+    "collection_banner_PAgJdN": {
+      "type": "collection-banner",
+      "name": "Collection Banner",
+      "settings": {
+        "banner_image": "shopify://shop_images/Frame_427319608.png"
+      }
     }
   },
   "order": [
     "announcement_bar_DcGwxb",
-    "header"
+    "header",
+    "collection_banner_PAgJdN"
   ]
 }
