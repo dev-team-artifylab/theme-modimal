@@ -133,7 +133,7 @@
         </svg>
       </button>
       <!-- Search -->
-      <a href="{{ routes.search_url }}" class="icon-search hidden md:block" aria-label="Search">
+      <button id="search-btn" href="{{ routes.search_url }}" class="icon-search cursor-pointer " aria-label="Search">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="w-5 h-5"
@@ -145,7 +145,12 @@
           <circle cx="11" cy="11" r="7"></circle>
           <path d="M20 20L16.65 16.65"></path>
         </svg>
-      </a>
+      </button>
+      <button id="close-search-btn" href="" class="icon-search  cursor-pointer hidden" aria-label="Search">
+        <img src="{{ 'close.png' | asset_url }}" alt="Close Search" width="20" height="20">  
+      </button>
+
+
 
       <!-- Profile -->
       {% if customer %}
@@ -246,7 +251,7 @@
   </nav>
 
   <div class="mt-8 p-4 border-t border-gray-100 grid grid-cols-2 gap-4">
-    <a href="{{ routes.search_url }}" class="flex items-center gap-2 text-sm text-gray-600">
+    <a id="search-btn" href="" class="flex items-center gap-2 text-sm text-gray-600">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
       </svg>
@@ -273,12 +278,62 @@
   </div>
 </div>
 
+
+
+{% comment %} search drawer {% endcomment %}
+ 
+<div id="search-drawer" class="w-full h-38 bg-white pt-8 hidden">
+  <div class="w-full h-14 flex items-center gap-4 border-b-2 border-gray-200 px-4">
+    <img src="{{ 'search.png' | asset_url }}" alt="Search" width="24" height="24">
+    <form action="{{ routes.search_url }}">
+      <input 
+        type="text" 
+        placeholder="Search..."
+        name="q"
+        value="{{ search.terms | escape }}"
+        class="bg-transparent border-none focus:outline-none">
+    </form>
+    
+  </div>
+</div>
+
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const drawer = document.getElementById('drawer-navigation');
     const overlay = document.getElementById('drawer-overlay');
     const openBtn = document.getElementById('menu-open');
     const closeBtn = document.getElementById('menu-close');
+
+    // search actions
+
+    const searchDrawer = document.getElementById('search-drawer');
+    const searchBtn = document.getElementById('search-btn');
+    const closeSearchBtn = document.getElementById('close-search-btn'); 
+
+    searchBtn.addEventListener('click', function () {
+      const isOpen = searchDrawer.classList.contains('hidden');
+    
+      if (isOpen) {
+        searchDrawer.classList.remove('hidden');
+        searchBtn.classList.add('hidden');
+        closeSearchBtn.classList.remove('hidden');
+        setTimeout(() => searchDrawer.classList.add('opacity-100'), 10);
+      } else {
+        searchDrawer.classList.remove('opacity-100');
+        setTimeout(() => searchDrawer.classList.add('hidden'), 300);
+      }
+    });
+
+    closeSearchBtn.addEventListener('click', function () {
+      searchDrawer.classList.remove('opacity-100');
+      setTimeout(() => searchDrawer.classList.add('hidden'), 300);
+      searchBtn.classList.remove('hidden');
+      closeSearchBtn.classList.add('hidden');
+    });
+    
+
+
+
 
     // Helper function to handle the drawer state
     function toggleDrawer(isOpen) {

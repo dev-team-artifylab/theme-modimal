@@ -5,36 +5,40 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/search
 {% endcomment %}
 
-<h1>{{ 'search.title' | t }}</h1>
+<h1 class="text-2xl font-bold pt-6">{{ 'search.title' | t }} </h1>
 
-<form action="{{ routes.search_url }}" method="get" role="search">
+<form action="{{ routes.search_url }}" method="get" role="search" class="search-form pt-4 ">
   <input
     type="search"
-    size="50"
+    size="50" 
     name="q"
     value="{{ search.terms | escape }}"
     placeholder="{{ 'search.placeholder' | t }}"
+    class="w-full p-2 border-b border-gray-300  "
   >
-  <button type="submit">{{ 'search.submit' | t }}</button>
+  
 </form>
 
 {% if search.performed %}
   {% if search.results_count == 0 %}
     <p>{{ 'search.no_results_html' | t: terms: search.terms }}</p>
   {% else %}
-    <p>{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
+    <p class="text-lg pt-4 pb-8">{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
 
-    <div class="search-results">
+    <div class="search-results flex flex-wrap gap-4 ">
       {% paginate search.results by 20 %}
         {% # Search result items may be an article, a page, or a product. %}
         {% for result in search.results %}
-          <div class="search-result">
+          <div class="search-result flex items-center gap-4 mb-6">
             {% assign featured_image = result.featured_image | default: result.image %}
             {% if featured_image %}
-              {% render 'image', class: 'search-result__image', image: featured_image, url: result.url, width: 400 %}
+              <div class="search-result__image-wrapper overflow-hidden">
+                {% render 'image', class: 'search-result__image', image: featured_image, url: result.url, width: 400 %}
+              </div>
+              
             {% endif %}
             <div class="search-result__content">
-              <p>
+              <p class="search-result__title text-sm font-medium">
                 {{ result.title | link_to: result.url }}
                 {% if result.price %}
                   {{ result.price | money_with_currency }}
